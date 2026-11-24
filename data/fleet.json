@@ -1,0 +1,242 @@
+[
+  {
+    "id": "BSC",
+    "name": "Baynes Sound Connector",
+    "mmsi": 316030644,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/baynes-sound-connector/BSC_"
+  },
+  {
+    "id": "CEL",
+    "name": "Coastal Celebration",
+    "mmsi": 316011409,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/coastal-celebration/CEL_"
+  },
+  {
+    "id": "INS",
+    "name": "Coastal Inspiration",
+    "mmsi": 316011408,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/coastal-inspiration/INS_"
+  },
+  {
+    "id": "REN",
+    "name": "Coastal Renaissance",
+    "mmsi": 316011407,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/coastal-renaissance/REN_"
+  },
+  {
+    "id": "IAUR",
+    "name": "Island Aurora",
+    "mmsi": 316039863,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/island-aurora/IAUR"
+  },
+  {
+    "id": "IDSC",
+    "name": "Island Discovery",
+    "mmsi": 316039864,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/island-discovery/IDSC"
+  },
+  {
+    "id": "IGYM",
+    "name": "Island Gwa̲'ya̲m",
+    "mmsi": 316059032,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/island-gwayam/IGYM"
+  },
+  {
+    "id": "IGWA",
+    "name": "Island G̲wawis",
+    "mmsi": 316047946,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/island-gwawis/IGWA"
+  },
+  {
+    "id": "IKWG",
+    "name": "Island Kwigwis",
+    "mmsi": 316047555,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/island-kwigwis/IKWG"
+  },
+  {
+    "id": "IKTA",
+    "name": "Island K’ulut’a",
+    "mmsi": 316046934,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/island-kuluta/IKTA"
+  },
+  {
+    "id": "INGL",
+    "name": "Island Nagalis",
+    "mmsi": 316046819,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/island-nagalis/INGL"
+  },
+  {
+    "id": "ISLQ",
+    "name": "Island sarlequun",
+    "mmsi": 316059031,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/island-sarlequun/ISLQ"
+  },
+  {
+    "id": "IXWL",
+    "name": "Island xwsaĺux̌ul",
+    "mmsi": 316059023,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/island-xwsauxul/IXWL"
+  },
+  {
+    "id": "KAHL",
+    "name": "Kahloke",
+    "mmsi": 316001236,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/kahloke/KAHL"
+  },
+  {
+    "id": "KLI",
+    "name": "Klitsa",
+    "mmsi": 316001235,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/klitsa/KLI_"
+  },
+  {
+    "id": "KWUN",
+    "name": "Kwuna",
+    "mmsi": 316001237,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/kwuna/KWUN"
+  },
+  {
+    "id": "ISKY",
+    "name": "Malaspina Sky",
+    "mmsi": 316012774,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/malaspina-sky/ISKY"
+  },
+  {
+    "id": "NADV",
+    "name": "Northern Adventure",
+    "mmsi": 316194000,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/northern-adventure/NADV"
+  },
+  {
+    "id": "NEXP",
+    "name": "Northern Expedition",
+    "mmsi": 316014054,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/northern-expedition/NEXP"
+  },
+  {
+    "id": "NSW",
+    "name": "Northern Sea Wolf",
+    "mmsi": 316036676,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/northern-sea-wolf/NSW_"
+  },
+  {
+    "id": "KUP",
+    "name": "Pune'luxutth",
+    "mmsi": 316009547,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/puneluxutth/KUP_"
+  },
+  {
+    "id": "QQII",
+    "name": "Quadra Queen II",
+    "mmsi": 316001244,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/quadra-queen-ii/QQII"
+  },
+  {
+    "id": "QALB",
+    "name": "Queen of Alberni",
+    "mmsi": 316001245,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/queen-of-alberni/QALB"
+  },
+  {
+    "id": "QCAP",
+    "name": "Queen of Capilano",
+    "mmsi": 316001247,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/queen-of-capilano/QCAP"
+  },
+  {
+    "id": "QCOQ",
+    "name": "Queen of Coquitlam",
+    "mmsi": 316001249,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/queen-of-coquitlam/QCOQ"
+  },
+  {
+    "id": "QCOW",
+    "name": "Queen of Cowichan",
+    "mmsi": 316001251,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/queen-of-cowichan/QCOW"
+  },
+  {
+    "id": "QCUM",
+    "name": "Queen of Cumberland",
+    "mmsi": 316001252,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/queen-of-cumberland/QCUM"
+  },
+  {
+    "id": "QNWM",
+    "name": "Queen of New Westminster",
+    "mmsi": 316001255,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/queen-of-new-westminster/QNWM"
+  },
+  {
+    "id": "QOAK",
+    "name": "Queen of Oak Bay",
+    "mmsi": 316001257,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/queen-of-oak-bay/QOAK"
+  },
+  {
+    "id": "QSUR",
+    "name": "Queen of Surrey",
+    "mmsi": 316001262,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/queen-of-surrey/QSUR"
+  },
+  {
+    "id": "QNIT",
+    "name": "Quinitsa",
+    "mmsi": 316001265,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/quinitsa/QNIT"
+  },
+  {
+    "id": "QSAM",
+    "name": "Quinsam",
+    "mmsi": 316001266,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/quinsam/QSAM"
+  },
+  {
+    "id": "EAG",
+    "name": "Salish Eagle",
+    "mmsi": 316030626,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/salish-eagle/EAG_"
+  },
+  {
+    "id": "HERO",
+    "name": "Salish Heron",
+    "mmsi": 316047943,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/salish-heron/HERO"
+  },
+  {
+    "id": "ORCA",
+    "name": "Salish Orca",
+    "mmsi": 316030627,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/salish-orca/ORCA"
+  },
+  {
+    "id": "RAV",
+    "name": "Salish Raven",
+    "mmsi": 316030628,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/salish-raven/RAV_"
+  },
+  {
+    "id": "SKEN",
+    "name": "Skeena Queen",
+    "mmsi": 316001267,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/skeena-queen/SKEN"
+  },
+  {
+    "id": "SOBC",
+    "name": "Spirit of British Columbia",
+    "mmsi": 316001268,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/spirit-of-british-columbia/SOBC"
+  },
+  {
+    "id": "SOVI",
+    "name": "Spirit of Vancouver Island",
+    "mmsi": 316001269,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/spirit-of-vancouver-island/SOVI"
+  },
+  {
+    "id": "TACH",
+    "name": "Tachek",
+    "mmsi": 316001271,
+    "url": "https://www.bcferries.com/on-the-ferry/our-fleet/tachek/TACH"
+  }
+]

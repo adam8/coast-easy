@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#14282c">
+  <meta name="apple-mobile-web-app-title" content="Coast Easy">
+  <meta name="description" content="Compare BC Ferries sailing times by date and see your crossing on the fleet map.">
+  <title>Coast Easy</title>
+  <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/coast-easy-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="/vendor/maplibre.css">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/sailings.css">
+  <script defer src="/vendor/maplibre.js"></script>
+  <script defer src="/vendor/pmtiles.js"></script>
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="/" aria-label="Coast Easy home">
+      <span class="brand-mark" data-icon="water"></span>
+      <span>Coast Easy</span>
+    </a>
+    <span class="masthead-divider"></span>
+    <span class="masthead-context">British Columbia</span>
+    <div class="masthead-actions">
+      <span class="feed-badge" id="feed-badge" role="status"><i></i><span id="feed-label">Connecting</span></span>
+      <button class="replay-toggle" id="replay-toggle" type="button" hidden>
+        <span data-icon="pause"></span><span id="replay-label">Pause</span>
+      </button>
+      <button class="install-toggle" id="install-toggle" type="button" aria-label="Install Coast Easy" title="Install Coast Easy" hidden>
+        <span data-icon="install"></span><span class="install-label">Install</span>
+      </button>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open menu" aria-haspopup="dialog" aria-controls="app-drawer" aria-expanded="false" data-icon="menu"></button>
+    </div>
+  </header>
+
+  <main class="coast-content">
+    <section id="sailings" aria-label="Sailing planner">
+      <div class="sailings-layout">
+        <section class="trip-settings" aria-label="Trip settings">
+          <details class="trip-step" id="trip-route-step" open>
+            <summary hidden><span class="trip-step-value" id="trip-route-summary"></span></summary>
+            <div class="trip-step-body">
+              <div class="trip-ports">
+                <div>
+                  <label for="trip-from">From</label>
+                  <select id="trip-from"><option value="" selected disabled>Choose port</option></select>
+                </div>
+                <button type="button" class="trip-swap" id="trip-swap" aria-label="Swap ports" title="Swap ports" data-icon="swap" disabled></button>
+                <div>
+                  <label for="trip-to">To</label>
+                  <select id="trip-to" disabled><option value="" selected disabled>Choose port</option></select>
+                </div>
+              </div>
+            </div>
+          </details>
+          <div class="trip-date-row">
+            <span id="trip-date-weekday"></span>
+            <input id="trip-date" type="date" aria-label="Sailing date" aria-describedby="trip-date-weekday" required>
+          </div>
+          <div class="trip-sailing-step" id="trip-sailing-step" hidden>
+            <div class="trip-pills" id="trip-pills" role="region" aria-label="Scheduled sailings" hidden></div>
+            <p class="trip-pills-message" id="trip-pills-message" role="status"></p>
+          </div>
+        </section>
+
+        <div class="trip-service" id="trip-service" hidden>
+          <p id="trip-freshness" class="trip-freshness" role="status"></p>
+          <aside class="trip-booking" id="trip-booking" hidden>Driving from Horseshoe Bay? Vehicle travel to Nanaimo requires advance booking. <a href="https://www.bcferries.com/hsb-travel" target="_blank" rel="noopener">BC Ferries booking information</a></aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="map-section" id="map-view" aria-labelledby="map-heading">
+      <header class="map-section-header">
+        <div>
+          <h2 id="map-heading">Fleet map</h2>
+          <p id="map-crossing" hidden></p>
+        </div>
+        <p class="map-sailing" id="map-sailing" hidden></p>
+      </header>
+      <div class="workspace">
+        <aside class="fleet-panel" id="fleet-panel" aria-labelledby="fleet-title">
+          <div class="fleet-top">
+            <div class="section-label"><span data-icon="radar"></span> BC Ferries</div>
+            <h3 id="fleet-title">Fleet tracker</h3>
+            <p id="fleet-caption">Loading the fleet roster…</p>
+            <dl class="fleet-stats">
+              <div><dt>Tracked</dt><dd id="tracked-count">–</dd></div>
+              <div><dt><i class="dot underway"></i> Underway</dt><dd id="underway-count">–</dd></div>
+              <div><dt><i class="dot still"></i> Still</dt><dd id="still-count">–</dd></div>
+            </dl>
+            <label class="search-box">
+              <span data-icon="search"></span>
+              <input id="fleet-search" autocomplete="off" type="search" placeholder="Search vessels" aria-label="Search vessels">
+            </label>
+            <div class="fleet-filters" aria-label="Vessel filter">
+              <button type="button" data-filter="all" aria-pressed="true">All vessels</button>
+              <button type="button" data-filter="underway" aria-pressed="false">Underway</button>
+              <button type="button" data-filter="still" aria-pressed="false">Still</button>
+            </div>
+          </div>
+          <div class="fleet-list" id="fleet-list" aria-label="Vessels"></div>
+          <footer class="fleet-footer"><span data-icon="signal"></span><span id="fleet-source">Loading position source</span></footer>
+        </aside>
+
+        <section class="chart-panel" aria-label="Map and selected vessel">
+          <div id="map" aria-label="Map of the BC Ferries network"></div>
+          <div class="map-toolbar" id="map-toolbar">
+            <div class="map-actions" id="desktop-map-controls">
+              <label class="region-select" id="map-region-control">
+                <span data-icon="map"></span>
+                <select id="map-region" aria-label="Map region">
+                  <option value="salish">Salish Sea</option>
+                  <option value="coast">BC Coast</option>
+                  <option value="north">North Coast</option>
+                </select>
+                <span data-icon="chevron"></span>
+              </label>
+            </div>
+            <div class="map-actions">
+              <button type="button" class="map-button icon-only" id="map-options-toggle" aria-label="Map options" aria-haspopup="dialog" aria-controls="map-options" aria-expanded="false">
+                <span data-icon="layers"></span>
+              </button>
+              <button type="button" class="map-button icon-only" id="reset-view" title="Recenter map" aria-label="Recenter map">
+                <span data-icon="focus"></span>
+              </button>
+            </div>
+          </div>
+          <div class="map-message" id="map-message" role="status" hidden></div>
+          <article class="vessel-card" id="vessel-card" aria-label="Selected vessel" hidden>
+            <div class="card-top">
+              <span class="card-avatar" data-icon="ship"></span>
+              <div>
+                <h2 id="vessel-name"></h2>
+                <p id="vessel-route"></p>
+              </div>
+              <button class="dismiss icon-only" type="button" id="dismiss-vessel" aria-label="Close vessel details" data-icon="close"></button>
+            </div>
+            <div class="card-readings">
+              <div><span>Speed</span><strong id="vessel-speed"></strong></div>
+              <div><span>Course</span><strong id="vessel-course"></strong></div>
+              <div><span>Last report</span><strong id="vessel-seen"></strong></div>
+            </div>
+            <div class="chart-area">
+              <div class="chart-caption"><span>Speed over time</span><span id="chart-window">15 min</span></div>
+              <canvas id="speed-chart" height="37" role="img" aria-label="Speed history from the 15 minutes before the latest report"></canvas>
+            </div>
+          </article>
+
+          <div class="map-key" aria-label="Map legend">
+            <span><i class="dot underway"></i> Underway</span>
+            <span><i class="dot still"></i> Still</span>
+            <span><i class="key-dash"></i> Route</span>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <div id="trip-records" hidden>
+      <details class="trip-table-section">
+        <summary><span>Full timetable</span><span id="trip-timetable-date"></span></summary>
+        <div id="trip-timetable"></div>
+      </details>
+      <details class="trip-table-section">
+        <summary><span>Departure history</span><span id="trip-history-count"></span></summary>
+        <div id="trip-history"></div>
+      </details>
+    </div>
+    <p class="trip-sources"><span id="trip-conditions-source" hidden><a id="trip-conditions-link" target="_blank" rel="noopener">BC Ferries Current Conditions</a> ·</span> <a href="https://github.com/samuel-pratt/bc-ferries-api" target="_blank" rel="noopener">Sailing data source</a></p>
+  </main>
+  <dialog class="map-options-dialog" id="map-options" aria-labelledby="map-options-title">
+    <header class="map-options-header">
+      <h2 id="map-options-title">Map options</h2>
+      <button class="map-button icon-only" id="map-options-close" type="button" aria-label="Close map options" data-icon="close" autofocus></button>
+    </header>
+    <div class="map-options-body">
+      <div class="compact-map-controls" id="compact-map-controls"></div>
+      <button type="button" class="map-button" id="routes-toggle" aria-pressed="true">
+        <span data-icon="layers"></span>Other ferry routes
+      </button>
+      <div class="map-options-zoom" role="group" aria-label="Zoom">
+        <button class="map-button" id="zoom-out" type="button">Zoom out</button>
+        <button class="map-button" id="zoom-in" type="button">Zoom in</button>
+      </div>
+      <label class="map-option-field" for="map-basemap">
+        Basemap
+        <select id="map-basemap">
+          <option value="standard">Coastal chart</option>
+          <option value="salish">Salish Sea (Protomaps pilot)</option>
+        </select>
+      </label>
+      <button class="map-button" id="map-download" type="button" hidden>Download Salish Sea map · 15.4 MB</button>
+      <p id="map-download-status" role="status"></p>
+    </div>
+  </dialog>
+  <dialog class="app-drawer" id="app-drawer" aria-labelledby="drawer-title">
+    <header class="drawer-header">
+      <button class="drawer-icon drawer-back" id="drawer-back" type="button" aria-label="Back to menu" data-icon="right" hidden></button>
+      <div class="drawer-heading"><h2 id="drawer-title">Menu</h2></div>
+      <button class="drawer-icon drawer-close" id="drawer-close" type="button" aria-label="Close menu" data-icon="close" autofocus></button>
+    </header>
+    <nav class="drawer-menu" id="drawer-menu" aria-label="Coast Easy menu">
+      <button type="button" aria-controls="fleet-panel"><span data-icon="radar"></span>Fleet tracker</button>
+      <button type="button" aria-controls="trip-timetable"><span data-icon="calendar"></span>Full timetable</button>
+      <button type="button" aria-controls="trip-history"><span data-icon="history"></span>Departure history</button>
+      <a id="drawer-conditions-link" href="https://www.bcferries.com/current-conditions" target="_blank" rel="noopener"><span data-icon="signal"></span>BC Ferries Current Conditions</a>
+      <a href="https://github.com/samuel-pratt/bc-ferries-api" target="_blank" rel="noopener"><span data-icon="external"></span>Sailing data source</a>
+    </nav>
+    <div class="drawer-panel" id="drawer-panel" hidden>
+      <p class="trip-table-message" id="drawer-record-empty" hidden>Choose a crossing in the planner to see its records.</p>
+    </div>
+  </dialog>
+</body>
+</html>

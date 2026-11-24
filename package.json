@@ -1,0 +1,21 @@
+{
+  "name": "coast-easy",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env server.mjs",
+    "start": "node --env-file-if-exists=.env server.mjs",
+    "check": "node --check server.mjs && node --check sailings-server.mjs && node --check ais-feed.mjs && node --check cloudflare/worker.mjs && node --check public/app.js && node --check public/demo.js && node --check public/report-cache.js && node --check public/sw.js && node --check public/sailings.js && node --check public/sailings-view.js && node --check public/salish-map.js",
+    "build": "node scripts/build-preview.mjs",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "maplibre-gl": "5.18.0",
+    "pmtiles": "4.5.0",
+    "ws": "8.21.0"
+  },
+  "devDependencies": {
+    "wrangler": "4.166.0"
+  }
+}
