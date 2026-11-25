@@ -15,9 +15,11 @@ TERMINALS = {
     "Comox (Little River)": "CMX",
     "Departure Bay (Nanaimo)": "NAN",
     "Duke Point (Nanaimo)": "DUK",
+    "Earls Cove (Sechelt)": "ERL",
     "Horseshoe Bay (Vancouver)": "HSB",
     "Langdale (Sunshine Coast)": "LNG",
     "Powell River (Westview)": "PWR",
+    "Saltery Bay (Powell River)": "SLT",
     "Vancouver (Tsawwassen)": "TSA",
     "Victoria (Swartz Bay) Berth 2": "SWB",
 }
@@ -27,6 +29,7 @@ CROSSINGS = (
     ("TSA", "DUK", ("Tsawwassen", "Duke Point")),
     ("HSB", "LNG", ("Horseshoe Bay", "Langdale")),
     ("CMX", "PWR", ("Little River", "Westview")),
+    ("SLT", "ERL", ("Earls Cove", "Saltery Bay")),
 )
 
 

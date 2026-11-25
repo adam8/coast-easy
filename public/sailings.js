@@ -4,9 +4,11 @@ export const terminals = {
   CMX: 'Comox (Little River)',
   NAN: 'Departure Bay',
   DUK: 'Duke Point',
+  ERL: 'Earls Cove',
   HSB: 'Horseshoe Bay',
   LNG: 'Langdale',
   PWR: 'Powell River (Westview)',
+  SLT: 'Saltery Bay',
   TSA: 'Tsawwassen',
   SWB: 'Swartz Bay',
 };
@@ -16,6 +18,7 @@ const routes = [
   ['TSA', 'DUK', 120],
   ['HSB', 'LNG', 40],
   ['CMX', 'PWR', 90],
+  ['SLT', 'ERL', 50],
 ];
 export const directions = Object.fromEntries(routes.flatMap(([a, b, duration]) =>
   [[a, b], [b, a]].map(([from, to]) => [from + to, {
@@ -74,7 +77,7 @@ export function decodeConditions(payload) {
   for (const route of payload.routes) {
     const { routeCode: direction } = route;
     if (!Object.hasOwn(directions, direction)) continue;
-    const observedAt = observation(route.observedAt);
+    const observedAt = route.dataStatus === 'not-published' ? null : observation(route.observedAt);
     routes[direction] = {
       observedAt,
       available: route.dataStatus === 'available' && payload.meta?.stale !== true,
