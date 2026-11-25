@@ -1,6 +1,6 @@
 import {
-  clock, conditionsUrl, dateOf, decodeConditions, departureDelay, directions,
-  isFresh, localNow, mergeReports, midnight, minutesPerDay, shortDate, terminals, timetable, weekdayName,
+  clock, dateOf, departureDelay, directions, fetchConditions, isFresh, localNow,
+  mergeReports, midnight, minutesPerDay, shortDate, terminals, timetable, weekdayName,
 } from './sailings.js';
 
 const byId = (id) => document.getElementById(id);
@@ -21,7 +21,7 @@ let schedule;
 let scheduleRequest;
 let conditions = loadSaved();
 let refreshInProgress = false;
-let updatesAvailable = false;
+let updatedRoutes = new Set();
 let preferredDeparture = null;
 let renderedDay;
 let updateMap;
@@ -168,7 +168,7 @@ function render() {
   const date = dateInput.value;
   const start = midnight(date);
   const now = Date.now();
-  const online = navigator.onLine && updatesAvailable;
+  const online = navigator.onLine && updatedRoutes.has(direction);
   const from = route ? terminals[route.from] : null;
   const to = route ? terminals[route.to] : null;
   routeSummary.hidden = !route;
@@ -187,7 +187,7 @@ function render() {
   if (chosen && chosen.effectiveArrival !== chosen.arrival) {
     timingUpdates.push(`${arrivalLabel(chosen)} ${timeWithDay(chosen.effectiveArrival, date)}`);
   }
-  updateMap({ from, to, summary: timingUpdates.join(' · ') });
+  updateMap({ from: route?.from, to: route?.to, summary: timingUpdates.join(' · ') });
   byId('trip-sailing-step').hidden = !route;
   byId('trip-service').hidden = !route;
   byId('trip-records').hidden = !route;
@@ -253,7 +253,7 @@ async function refresh() {
       ...record, estimatedArrival: null, estimatedDeparture: null,
       status: record.actualArrival !== null ? 'arrived' : 'departed',
     }));
-    const next = backend?.conditions ?? await json(conditionsUrl).then(decodeConditions).catch(() => null);
+    const next = backend?.conditions ?? await fetchConditions(json).catch(() => null);
     const cutoff = localNow() - 30 * minutesPerDay;
     const saved = loadSaved();
     conditions = {
@@ -261,10 +261,10 @@ async function refresh() {
       reports: mergeReports(mergeReports(saved.reports, conditions.reports), [...archived, ...(next?.reports ?? [])])
         .filter((trip) => trip.scheduled >= cutoff),
     };
-    updatesAvailable = Boolean(next);
+    updatedRoutes = new Set(Object.keys(next?.routes ?? {}));
     saveReports();
   } catch {
-    updatesAvailable = false;
+    updatedRoutes.clear();
   } finally {
     refreshInProgress = false;
     render();

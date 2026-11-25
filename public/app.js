@@ -2,6 +2,7 @@ import { createReplay } from './demo.js';
 import { icon } from './icons.js';
 import { loadReports, mergeReport, recentTrail, saveReports, trailWindow } from './report-cache.js';
 import { hasSavedSalishMap, salishBasemap, salishMapBounds, saveSalishMap } from './salish-map.js';
+import { terminals } from './sailings.js';
 import { showSailings } from './sailings-view.js';
 
 const byId = (id) => document.getElementById(id);
@@ -39,6 +40,7 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const compactLayout = matchMedia('(max-width: 710px), (max-width: 950px) and (max-height: 500px)');
 const sidePlanner = matchMedia('(min-width: 640px) and (max-width: 950px) and (max-height: 500px)');
 const minute = 60_000;
+const mapTerminalNames = { CMX: 'Little River', PWR: 'Westview' };
 const regions = {
   salish: salishMapBounds,
   coast: [[-132.60, 48.26], [-122.42, 54.63]],
@@ -458,12 +460,12 @@ function updateMapLayout() {
 function updateSailingMap({ from, to, summary }) {
   if (sailingSummary.textContent !== summary) sailingSummary.textContent = summary;
   sailingSummary.hidden = !summary;
-  const changed = from !== tripPorts?.from || to !== tripPorts?.to;
-  if (changed) {
-    tripPorts = { from, to };
+  const [origin, destination] = [from, to].map((port) => mapTerminalNames[port] ?? terminals[port]);
+  if (origin !== tripPorts?.from || destination !== tripPorts?.to) {
+    tripPorts = { from: origin, to: destination };
     plannedCrossing = findPlannedCrossing();
     const crossing = byId('map-crossing');
-    crossing.textContent = from && to ? `${from} → ${to}` : '';
+    crossing.textContent = from && to ? `${terminals[from]} → ${terminals[to]}` : '';
     crossing.hidden = !from || !to;
     updateCrossingLayers();
     if (compactLayout.matches) {

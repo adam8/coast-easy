@@ -2,6 +2,7 @@
 import csv
 import io
 import json
+import re
 import sys
 from collections import defaultdict
 from datetime import date, timedelta
@@ -11,10 +12,12 @@ from zipfile import ZipFile
 SOURCE = "https://data.trilliumtransit.com/gtfs/bcferries-bc-ca/bcferries-bc-ca.zip"
 WEEKDAYS = ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
 TERMINALS = {
+    "Comox (Little River)": "CMX",
     "Departure Bay (Nanaimo)": "NAN",
     "Duke Point (Nanaimo)": "DUK",
     "Horseshoe Bay (Vancouver)": "HSB",
     "Langdale (Sunshine Coast)": "LNG",
+    "Powell River (Westview)": "PWR",
     "Vancouver (Tsawwassen)": "TSA",
     "Victoria (Swartz Bay) Berth 2": "SWB",
 }
@@ -23,6 +26,7 @@ CROSSINGS = (
     ("TSA", "SWB", ("Tsawwassen", "Swartz Bay")),
     ("TSA", "DUK", ("Tsawwassen", "Duke Point")),
     ("HSB", "LNG", ("Horseshoe Bay", "Langdale")),
+    ("CMX", "PWR", ("Little River", "Westview")),
 )
 
 
@@ -33,6 +37,13 @@ def gtfs_date(value):
 def minutes(clock):
     hours, mins, _ = map(int, clock.split(":"))
     return 60 * hours + mins
+
+
+def trip_exceptions(short_name):
+    # The BC Ferries feed uses trip_short_name for per-trip date exceptions.
+    if not re.fullmatch(r"[12]-\d{8}(?:,[12]-\d{8})*", short_name):
+        return {}
+    return {gtfs_date(entry[2:]): entry[0] for entry in short_name.split(",")}
 
 
 def build(archive):
@@ -65,7 +76,8 @@ def build(archive):
         depart, arrive = minutes(start["departure_time"]), minutes(end["arrival_time"])
         if arrive <= depart:
             raise ValueError(f"Invalid crossing times for {trip['trip_id']}")
-        crossings[trip["service_id"]].append((origin + destination, depart, arrive))
+        dates = trip_exceptions(trip.get("trip_short_name") or "")
+        crossings[trip["service_id"]].append((origin + destination, depart, arrive, dates))
 
     calendars = {row["service_id"]: row for row in rows("calendar")}
     exceptions = {
@@ -84,11 +96,13 @@ def build(archive):
         for service, options in crossings.items():
             exception = exceptions.get((service, day))
             calendar = calendars.get(service)
-            regular = calendar and calendar[WEEKDAYS[day.weekday()]] == "1" and (
+            regular = calendar and not calendar.get("service_name", "").startswith("Exception Only") and (
+                calendar[WEEKDAYS[day.weekday()]] == "1" and
                 gtfs_date(calendar["start_date"]) <= day <= gtfs_date(calendar["end_date"])
             )
-            if exception == "1" or (exception != "2" and regular):
-                for direction, depart, arrive in options:
+            for direction, depart, arrive, dates in options:
+                override = dates.get(day, exception)
+                if override == "1" or (override != "2" and regular):
                     calendar_date = day + timedelta(days=depart // 1440)
                     if calendar_date <= last:
                         offset = depart // 1440 * 1440

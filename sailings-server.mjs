@@ -1,13 +1,13 @@
 import { Agent, get } from 'node:https';
 import { DatabaseSync } from 'node:sqlite';
-import { conditionsUrl, decodeConditions, localNow, minutesPerDay } from './public/sailings.js';
+import { fetchConditions, localNow, minutesPerDay } from './public/sailings.js';
 
 const agent = new Agent({ proxyEnv: process.env });
 const historyWindow = 30 * minutesPerDay;
 
-function readConditions() {
+function readJson(url) {
   return new Promise((resolve, reject) => {
-    const request = get(conditionsUrl, { agent, headers: { Accept: 'application/json' } }, (response) => {
+    const request = get(url, { agent, headers: { Accept: 'application/json' } }, (response) => {
       if (response.statusCode !== 200) {
         response.resume();
         reject(new Error('Conditions request returned HTTP ' + response.statusCode));
@@ -22,7 +22,7 @@ function readConditions() {
       response.on('error', reject);
       response.on('end', () => {
         try {
-          resolve(decodeConditions(JSON.parse(text)));
+          resolve(JSON.parse(text));
         } catch (error) {
           reject(error);
         }
@@ -62,7 +62,7 @@ export function collectSailings() {
 
   async function refresh() {
     try {
-      conditions = await readConditions();
+      conditions = await fetchConditions(readJson);
       database.exec('BEGIN IMMEDIATE');
       try {
         for (const record of conditions.reports) {

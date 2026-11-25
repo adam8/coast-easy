@@ -1,9 +1,12 @@
-export const conditionsUrl = 'https://bcferriesapi.ca/v2/capacity/';
+const capacityConditionsUrl = 'https://bcferriesapi.ca/v2/capacity/';
+const nonCapacityConditionsUrl = 'https://bcferriesapi.ca/v2/noncapacity/';
 export const terminals = {
+  CMX: 'Comox (Little River)',
   NAN: 'Departure Bay',
   DUK: 'Duke Point',
   HSB: 'Horseshoe Bay',
   LNG: 'Langdale',
+  PWR: 'Powell River (Westview)',
   TSA: 'Tsawwassen',
   SWB: 'Swartz Bay',
 };
@@ -12,6 +15,7 @@ const routes = [
   ['TSA', 'SWB', 95],
   ['TSA', 'DUK', 120],
   ['HSB', 'LNG', 40],
+  ['CMX', 'PWR', 90],
 ];
 export const directions = Object.fromEntries(routes.flatMap(([a, b, duration]) =>
   [[a, b], [b, a]].map(([from, to]) => [from + to, {
@@ -93,6 +97,33 @@ export function decodeConditions(payload) {
   }
   if (!Object.keys(routes).length) throw new Error('No reports for the major routes');
   return { routes, reports };
+}
+
+function decodeNonCapacityConditions(payload) {
+  if (!Array.isArray(payload?.routes)) throw new Error('Sailing reports unavailable');
+  // This endpoint's overall freshness describes schedules. Live reports carry their own observation times.
+  return decodeConditions({
+    routes: payload.routes.filter((route) => route.currentConditions).map((route) => ({
+      ...route.currentConditions,
+      routeCode: route.routeCode,
+    })),
+  });
+}
+
+export async function fetchConditions(readJson) {
+  const [capacity, nonCapacity] = await Promise.allSettled([
+    readJson(capacityConditionsUrl).then(decodeConditions),
+    readJson(nonCapacityConditionsUrl).then(decodeNonCapacityConditions),
+  ]);
+  if (capacity.status === 'rejected' && nonCapacity.status === 'rejected') throw capacity.reason;
+  const capacityRoutes = capacity.value?.routes ?? {};
+  return {
+    routes: { ...nonCapacity.value?.routes, ...capacityRoutes },
+    reports: [
+      ...(capacity.value?.reports ?? []),
+      ...(nonCapacity.value?.reports ?? []).filter(({ direction }) => !Object.hasOwn(capacityRoutes, direction)),
+    ],
+  };
 }
 
 export function isFresh(observedAt, now) {
