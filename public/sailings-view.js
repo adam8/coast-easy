@@ -78,15 +78,19 @@ function arrivalLabel(trip) {
 function makePill(trip, date, selected) {
   const pill = element('button', '', 'trip-pill');
   const departure = clock(trip.scheduled);
-  const arrival = timeWithDay(trip.arrival, date);
+  const arrival = clock(trip.arrival);
+  const arrivalDay = dateOf(trip.arrival) === date ? '' : shortDate(trip.arrival);
   const details = [trip.status === 'Scheduled' ? '' : trip.status, trip.approximate ? 'Approx. arrival' : '']
     .filter(Boolean).join(' · ');
   pill.type = 'button';
   pill.disabled = !trip.selectable;
   pill.dataset.departure = String(trip.scheduled);
   pill.setAttribute('aria-pressed', String(selected));
-  pill.setAttribute('aria-label', `Departs ${departure}, arrives ${arrival}${details ? ', ' + details : ''}`);
-  pill.append(element('span', `${departure} → ${arrival}`, 'trip-pill-times'));
+  pill.setAttribute('aria-label', `Departs ${departure}, arrives ${arrival}${arrivalDay ? ' · ' + arrivalDay : ''}${details ? ', ' + details : ''}`);
+  const times = element('span', '', 'trip-pill-times');
+  times.append(element('span', departure), ' ', element('span', `→ ${arrival}`));
+  if (arrivalDay) times.append(' ', element('span', `· ${arrivalDay}`));
+  pill.append(times);
   if (details) pill.append(element('span', details, 'trip-pill-status'));
   return pill;
 }

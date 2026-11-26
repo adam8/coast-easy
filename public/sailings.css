@@ -100,6 +100,9 @@
   }
   .sailings-layout { margin-bottom: 0; }
   .trip-settings { border: 0; padding-bottom: 7px; background: transparent; }
+  .trip-pill { flex-basis: clamp(6.5rem, calc(44% - 7px), 9.5rem); padding: 5px 8px; white-space: normal; }
+  .trip-pill-times { line-height: 1.15; }
+  .trip-pill-times > span { display: inline-block; white-space: nowrap; }
   .trip-service { margin-top: 0; padding: 0 13px 8px; }
   .map-section { display: flex; flex-direction: column; min-height: 0; }
   .map-section-header { display: block; margin: 0; }
