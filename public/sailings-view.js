@@ -17,6 +17,18 @@ const drawerConditionsLink = byId('drawer-conditions-link');
 const conditionsIndex = drawerConditionsLink.href;
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const storageKey = 'coast-easy:sailing-reports:v1';
+const portLabels = {
+  NAN: 'Departure Bay (Nanaimo)',
+  DUK: 'Duke Point (Nanaimo)',
+  ERL: 'Earls Cove (Sunshine Coast)',
+  HSB: 'Horseshoe Bay (Vancouver)',
+  LNG: 'Langdale (Sunshine Coast)',
+  CMX: 'Little River (Comox)',
+  SLT: 'Saltery Bay (Powell River)',
+  SWB: 'Swartz Bay (Victoria)',
+  TSA: 'Tsawwassen (Vancouver)',
+  PWR: 'Westview (Powell River)',
+};
 let schedule;
 let scheduleRequest;
 let conditions = loadSaved();
@@ -27,13 +39,17 @@ let renderedDay;
 let updateMap;
 
 dateInput.value = dateOf(localNow());
-const portOptions = Object.entries(terminals).sort((a, b) => a[1].localeCompare(b[1]));
-fromInput.append(...portOptions.map(([code, name]) => new Option(name, code)));
+const portOptions = Object.keys(terminals).map(portOption).sort((a, b) => a.text.localeCompare(b.text));
+fromInput.append(...portOptions);
 setDestinations();
+
+function portOption(code) {
+  return new Option(portLabels[code] ?? terminals[code], code);
+}
 
 function setDestinations(preferred = toInput.value) {
   const destinations = Object.values(directions).filter(({ from }) => from === fromInput.value);
-  toInput.replaceChildren(blankDestination, ...destinations.map(({ to }) => new Option(terminals[to], to)));
+  toInput.replaceChildren(blankDestination, ...destinations.map(({ to }) => portOption(to)));
   toInput.disabled = destinations.length === 0;
   toInput.value = destinations.find(({ to }) => to === preferred)?.to
     ?? (destinations.length === 1 ? destinations[0].to : '');
