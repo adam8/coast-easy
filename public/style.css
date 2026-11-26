@@ -211,7 +211,7 @@ h1, .fleet-top h3 { margin: 6px 0 0; font-family: 'Manrope', 'DM Sans', sans-ser
   .menu-toggle { display: grid; place-items: center; width: 36px; height: 34px; padding: 0; border: 1px solid #4c6567; border-radius: 7px; background: transparent; color: #e4eeea; }
   .menu-toggle:hover { background: #2b4448; }
   .app-drawer[open] { position: fixed; inset: 0 0 0 auto; display: flex; flex-direction: column; margin: 0; padding: 0; border: 0; width: min(350px, calc(100% - 32px)); height: 100%; max-width: none; max-height: none; background: var(--paper); color: var(--ink); overflow: hidden; box-shadow: -8px 0 32px #14282c37; }
-  .app-drawer::backdrop { background: #14282c70; }
+  .app-drawer::backdrop { background: transparent; }
   .drawer-header { display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
   .drawer-heading { flex: 1; }
   .drawer-heading h2 { font: 800 1.125rem 'Manrope', 'DM Sans', sans-serif; }
