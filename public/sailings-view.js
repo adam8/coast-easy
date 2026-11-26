@@ -4,8 +4,6 @@ import {
 } from './sailings.js';
 
 const byId = (id) => document.getElementById(id);
-const routeStep = byId('trip-route-step');
-const routeSummary = routeStep.querySelector('summary');
 const fromInput = byId('trip-from');
 const toInput = byId('trip-to');
 const blankDestination = toInput.options[0];
@@ -199,12 +197,7 @@ function render() {
   const start = midnight(date);
   const now = Date.now();
   const online = navigator.onLine && updatedRoutes.has(direction);
-  const from = route ? terminals[route.from] : null;
-  const to = route ? terminals[route.to] : null;
-  routeSummary.hidden = !route;
   swapPorts.disabled = !route;
-  if (!route) routeStep.open = true;
-  byId('trip-route-summary').textContent = route ? `${from} → ${to}` : '';
   byId('trip-date-weekday').textContent = start === null ? 'Choose a day' : weekdayName(start);
   const validDate = schedule && start !== null && date >= schedule.validFrom && date <= schedule.validTo;
   const trips = route && validDate ? timetable(schedule, direction, date, conditions, now, online) : [];
@@ -325,45 +318,10 @@ function editPlan() {
   render();
 }
 
-function collapseRoute() {
-  if (directions[fromInput.value + toInput.value]) routeStep.open = false;
-}
-
-let pointerLeavingRoute = false;
-document.addEventListener('pointerdown', (event) => {
-  pointerLeavingRoute = !routeStep.contains(event.target);
-}, true);
-for (const event of ['keydown', 'pointercancel']) {
-  document.addEventListener(event, () => { pointerLeavingRoute = false; }, true);
-}
-routeStep.addEventListener('focusout', (event) => {
-  if (!pointerLeavingRoute && event.relatedTarget && !routeStep.contains(event.relatedTarget)) collapseRoute();
-});
-document.addEventListener('pointerup', (event) => {
-  // WebKit may not dispatch a click for a tap on plain text or whitespace.
-  if (event.pointerType === 'touch' && pointerLeavingRoute && !routeStep.contains(event.target) &&
-    !event.target.closest('a, button, input, label, select, summary, textarea, [tabindex]')) {
-    pointerLeavingRoute = false;
-    collapseRoute();
-  }
-}, true);
-document.addEventListener('click', (event) => {
-  if (routeStep.contains(event.target)) return;
-  if (!routeStep.open || routeSummary.hidden) {
-    pointerLeavingRoute = false;
-    return;
-  }
-  // Let the tapped row activate before collapsing changes its position.
-  requestAnimationFrame(() => {
-    pointerLeavingRoute = false;
-    collapseRoute();
-  });
-}, true);
 pills.addEventListener('click', (event) => {
   const pill = event.target.closest('.trip-pill:not(:disabled)');
   if (!pill) return;
   preferredDeparture = Number(pill.dataset.departure);
-  collapseRoute();
   render();
 });
 pills.addEventListener('keydown', (event) => {
