@@ -7,7 +7,7 @@
 .trip-step { position: relative; }
 .trip-step summary { display: flex; align-items: center; justify-content: center; min-height: 44px; padding-block: 8px; color: #30564c; font-weight: 800; font-size: .875rem; text-align: center; cursor: pointer; list-style: none; }
 .trip-step summary::-webkit-details-marker { display: none; }
-.trip-date-row { display: grid; grid-template-columns: fit-content(45%) minmax(0, 15rem); align-items: center; gap: 8px; padding-block: 4px; }
+.trip-date-row { display: grid; grid-template-columns: fit-content(45%) minmax(0, 10.5rem); align-items: center; justify-content: center; gap: 8px; padding-block: 4px; text-align: center; }
 #trip-date-weekday { color: #30564c; font-size: .875rem; font-weight: 800; }
 #trip-route-step[open] > summary { position: absolute; width: 1px; height: 1px; min-height: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 #trip-route-step[open]:has(> summary:focus-visible) { outline: 2px solid #147965; outline-offset: 2px; }
@@ -23,8 +23,8 @@
 .trip-swap:hover:not(:disabled), .trip-swap:active:not(:disabled) { background: #dfefe3; }
 .trip-swap:disabled, .trip-ports select:disabled { opacity: .55; cursor: default; }
 .trip-swap svg { width: 20px; height: 20px; }
-#trip-date { -webkit-appearance: none; appearance: none; max-width: 100%; }
-#trip-date::-webkit-date-and-time-value { display: grid; align-content: center; height: 100%; min-width: 0; margin: 0; text-align: start; }
+#trip-date { -webkit-appearance: none; appearance: none; max-width: 100%; text-align: center; }
+#trip-date::-webkit-date-and-time-value { display: grid; align-content: center; height: 100%; min-width: 0; margin: 0; text-align: center; }
 .trip-service { margin-top: 4px; }
 .trip-booking { margin-top: 8px; padding: 10px; border-radius: 8px; background: #f8f0dc; color: #634b28; font-size: .85rem; line-height: 1.5; }
 .trip-booking a, .trip-sources a { color: inherit; text-underline-offset: 3px; font-weight: 700; }
