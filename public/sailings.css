@@ -8,7 +8,7 @@
 .trip-step summary { display: flex; align-items: center; justify-content: center; min-height: 44px; padding-block: 8px; color: #30564c; font-weight: 800; font-size: .875rem; text-align: center; cursor: pointer; list-style: none; }
 .trip-step summary::-webkit-details-marker { display: none; }
 .trip-date-row { display: grid; grid-template-columns: fit-content(45%) minmax(0, 10.5rem); align-items: center; justify-content: center; gap: 8px; padding-block: 4px; text-align: center; }
-#trip-date-weekday { color: #30564c; font-size: .875rem; font-weight: 800; }
+#trip-date-weekday, #trip-date { color: #30564c; font-size: .875rem; font-weight: 800; }
 #trip-route-step[open] > summary { position: absolute; width: 1px; height: 1px; min-height: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 #trip-route-step[open]:has(> summary:focus-visible) { outline: 2px solid #147965; outline-offset: 2px; }
 .trip-step-value { overflow-wrap: anywhere; font-weight: 700; color: var(--ink); }
