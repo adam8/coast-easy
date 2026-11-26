@@ -94,7 +94,7 @@ let cameraFocus = 'region';
 let layoutFrame = 0;
 let drawerExit;
 let drawerEntry;
-let drawerSwipe;
+let drawerDrag;
 
 try { prefersSalish = localStorage.getItem('coast-easy:basemap') === 'salish'; } catch { /* The map also works without storage. */ }
 
@@ -821,17 +821,36 @@ function startReplay() {
   }, 1000);
 }
 
-function closeDrawer() {
+function closeDrawer(velocity = 0, distance = 0) {
   if (!appDrawer.open || drawerExit) return;
+  drawerDrag = undefined;
   if (reducedMotion.matches) {
     appDrawer.close();
     return;
   }
-  drawerExit = appDrawer.animate([
-    { transform: getComputedStyle(appDrawer).transform },
+  const transform = getComputedStyle(appDrawer).transform;
+  for (const animation of appDrawer.getAnimations()) animation.cancel();
+  appDrawer.style.removeProperty('transform');
+  const duration = velocity > 0
+    ? Math.max(90, Math.min(220, (appDrawer.offsetWidth - distance) / (velocity + .8)))
+    : 220;
+  const exit = appDrawer.animate([
+    { transform },
     { transform: 'translateX(100%)' },
-  ], { duration: 220, easing: 'ease-in', fill: 'forwards' });
-  drawerExit.finished.then(() => appDrawer.close(), () => {});
+  ], { duration, easing: velocity > 0 ? 'ease-out' : 'ease-in', fill: 'forwards' });
+  drawerExit = exit;
+  exit.finished.then(() => { if (drawerExit === exit) appDrawer.close(); }, () => {});
+}
+
+function returnDrawerDrag() {
+  if (drawerDrag?.active && appDrawer.open && !reducedMotion.matches) {
+    appDrawer.animate([
+      { transform: appDrawer.style.transform },
+      { transform: 'none' },
+    ], { duration: 180, easing: 'ease-out' });
+  }
+  drawerDrag = undefined;
+  appDrawer.style.removeProperty('transform');
 }
 
 function showDrawerView(entry) {
@@ -906,27 +925,68 @@ drawerBack.addEventListener('click', () => {
   showDrawerView();
   previous?.button.focus({ preventScroll: true });
 });
-drawerClose.addEventListener('click', closeDrawer);
+drawerClose.addEventListener('click', () => closeDrawer());
 appDrawer.addEventListener('touchstart', (event) => {
-  drawerSwipe = undefined;
-  if (drawerExit || event.touches.length !== 1 || event.target === appDrawer ||
-    event.target.closest('input, select, textarea, [contenteditable]')) return;
-  const table = event.target.closest('.trip-table-wrap');
-  if (table && table.scrollWidth > table.clientWidth) return;
+  if (event.touches.length !== 1) {
+    returnDrawerDrag();
+    return;
+  }
+  if (drawerExit || appDrawer.getAnimations().some((animation) => animation.playState === 'running')) return;
   const { identifier, clientX, clientY } = event.touches[0];
-  drawerSwipe = { identifier, clientX, clientY };
+  const target = document.elementFromPoint(clientX, clientY);
+  if (!target || target === appDrawer || !appDrawer.contains(target) ||
+    target.closest('input, select, textarea, [contenteditable]')) return;
+  const table = target.closest('.trip-table-wrap');
+  if (table && table.scrollWidth > table.clientWidth) return;
+  drawerDrag = {
+    identifier, clientX, clientY, active: false,
+    samples: [{ x: clientX, time: event.timeStamp }],
+  };
 }, { passive: true });
-appDrawer.addEventListener('touchcancel', () => { drawerSwipe = undefined; });
+appDrawer.addEventListener('touchmove', (event) => {
+  const drag = drawerDrag;
+  if (!drag) return;
+  const touch = event.touches[0];
+  if (event.touches.length !== 1 || touch.identifier !== drag.identifier || !event.cancelable) {
+    returnDrawerDrag();
+    return;
+  }
+  const horizontal = touch.clientX - drag.clientX;
+  const vertical = Math.abs(touch.clientY - drag.clientY);
+  if (!drag.active) {
+    if (Math.max(Math.abs(horizontal), vertical) < 8) return;
+    if (horizontal < 8 || horizontal < vertical * 1.5) {
+      drawerDrag = undefined;
+      return;
+    }
+    drag.active = true;
+  }
+  event.preventDefault();
+  const distance = Math.max(0, Math.min(appDrawer.offsetWidth, horizontal));
+  appDrawer.style.transform = `translateX(${distance}px)`;
+  drag.samples = drag.samples.filter(({ time }) => time >= event.timeStamp - 100);
+  drag.samples.push({ x: touch.clientX, time: event.timeStamp });
+}, { passive: false });
+appDrawer.addEventListener('touchcancel', returnDrawerDrag);
 appDrawer.addEventListener('touchend', (event) => {
-  const start = drawerSwipe;
-  drawerSwipe = undefined;
+  const drag = drawerDrag;
+  if (!drag) return;
   const touch = event.changedTouches[0];
-  if (!start || event.touches.length || touch?.identifier !== start.identifier) return;
-  const horizontal = touch.clientX - start.clientX;
-  const vertical = Math.abs(touch.clientY - start.clientY);
-  if (horizontal < 64 || horizontal < vertical * 1.5) return;
+  if (!drag.active || event.touches.length || touch?.identifier !== drag.identifier) {
+    returnDrawerDrag();
+    return;
+  }
   if (event.cancelable) event.preventDefault();
-  closeDrawer();
+  const distance = Math.max(0, Math.min(appDrawer.offsetWidth, touch.clientX - drag.clientX));
+  const recent = drag.samples.find(({ time }) => event.timeStamp - time <= 100 && event.timeStamp > time);
+  const velocity = recent ? (touch.clientX - recent.x) / (event.timeStamp - recent.time) : 0;
+  const flicked = velocity >= .5 && distance >= 12;
+  if (distance >= 36 || flicked) {
+    appDrawer.style.transform = `translateX(${distance}px)`;
+    closeDrawer(flicked ? velocity : 0, distance);
+  } else {
+    returnDrawerDrag();
+  }
 }, { passive: false });
 appDrawer.addEventListener('click', (event) => {
   if (event.target === appDrawer) closeDrawer();
@@ -936,9 +996,10 @@ appDrawer.addEventListener('cancel', (event) => {
   closeDrawer();
 });
 appDrawer.addEventListener('close', () => {
-  drawerExit?.cancel();
+  for (const animation of appDrawer.getAnimations()) animation.cancel();
   drawerExit = undefined;
-  drawerSwipe = undefined;
+  drawerDrag = undefined;
+  appDrawer.style.removeProperty('transform');
   menuToggle.setAttribute('aria-expanded', 'false');
   if (compactLayout.matches) menuToggle.focus({ preventScroll: true });
 });
