@@ -94,6 +94,7 @@ let cameraFocus = 'region';
 let layoutFrame = 0;
 let drawerExit;
 let drawerEntry;
+let drawerSwipe;
 
 try { prefersSalish = localStorage.getItem('coast-easy:basemap') === 'salish'; } catch { /* The map also works without storage. */ }
 
@@ -906,6 +907,27 @@ drawerBack.addEventListener('click', () => {
   previous?.button.focus({ preventScroll: true });
 });
 drawerClose.addEventListener('click', closeDrawer);
+appDrawer.addEventListener('touchstart', (event) => {
+  drawerSwipe = undefined;
+  if (drawerExit || event.touches.length !== 1 || event.target === appDrawer ||
+    event.target.closest('input, select, textarea, [contenteditable]')) return;
+  const table = event.target.closest('.trip-table-wrap');
+  if (table && table.scrollWidth > table.clientWidth) return;
+  const { identifier, clientX, clientY } = event.touches[0];
+  drawerSwipe = { identifier, clientX, clientY };
+}, { passive: true });
+appDrawer.addEventListener('touchcancel', () => { drawerSwipe = undefined; });
+appDrawer.addEventListener('touchend', (event) => {
+  const start = drawerSwipe;
+  drawerSwipe = undefined;
+  const touch = event.changedTouches[0];
+  if (!start || event.touches.length || touch?.identifier !== start.identifier) return;
+  const horizontal = touch.clientX - start.clientX;
+  const vertical = Math.abs(touch.clientY - start.clientY);
+  if (horizontal < 64 || horizontal < vertical * 1.5) return;
+  if (event.cancelable) event.preventDefault();
+  closeDrawer();
+}, { passive: false });
 appDrawer.addEventListener('click', (event) => {
   if (event.target === appDrawer) closeDrawer();
 });
@@ -916,6 +938,7 @@ appDrawer.addEventListener('cancel', (event) => {
 appDrawer.addEventListener('close', () => {
   drawerExit?.cancel();
   drawerExit = undefined;
+  drawerSwipe = undefined;
   menuToggle.setAttribute('aria-expanded', 'false');
   if (compactLayout.matches) menuToggle.focus({ preventScroll: true });
 });
