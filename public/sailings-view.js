@@ -378,6 +378,16 @@ swapPorts.addEventListener('click', () => {
   setDestinations(origin);
   editPlan();
 });
+dateInput.closest('label')?.addEventListener('click', (event) => {
+  if (event.target === dateInput || typeof dateInput.showPicker !== 'function') return;
+  dateInput.focus({ preventScroll: true });
+  try {
+    dateInput.showPicker();
+    event.preventDefault();
+  } catch {
+    // Let the label activate the input if the browser cannot open the picker here.
+  }
+});
 dateInput.addEventListener('input', editPlan);
 window.addEventListener('offline', () => render());
 window.addEventListener('online', loadSchedule);

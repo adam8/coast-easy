@@ -7,14 +7,15 @@
 .trip-step { position: relative; }
 .trip-step summary { display: flex; align-items: center; justify-content: center; min-height: 44px; padding-block: 8px; color: #30564c; font-weight: 800; font-size: .875rem; text-align: center; cursor: pointer; list-style: none; }
 .trip-step summary::-webkit-details-marker { display: none; }
-.trip-date-row { display: grid; grid-template-columns: fit-content(45%) minmax(0, 10.5rem); align-items: center; justify-content: center; gap: 8px; padding-block: 4px; text-align: center; }
+.trip-date-row { display: flex; justify-content: center; padding-block: 4px; }
+.trip-date-field { display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center; column-gap: 8px; max-width: 100%; padding-inline: 10px; border: 1px solid #d7e3da; border-radius: 7px; background: #f9fbf8; cursor: pointer; }
+.trip-date-field:focus-within { outline: 2px solid #147965; outline-offset: 2px; }
 #trip-date-weekday, #trip-date { color: #30564c; font-size: .875rem; font-weight: 800; }
 #trip-route-step[open] > summary { position: absolute; width: 1px; height: 1px; min-height: 0; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 #trip-route-step[open]:has(> summary:focus-visible) { outline: 2px solid #147965; outline-offset: 2px; }
 .trip-step-value { overflow-wrap: anywhere; font-weight: 700; color: var(--ink); }
 .trip-step-body { min-width: 0; padding-block: 4px; }
 .trip-settings label { font-size: .875rem; font-weight: 800; color: #34564d; }
-.trip-settings input,
 .trip-settings select { display: block; width: 100%; min-width: 0; height: 42px; border: 1px solid #d7e3da; border-radius: 7px; color: var(--ink); background: #f9fbf8; padding: 0 8px; font-size: 1rem; }
 .trip-ports { display: grid; grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr); gap: 6px; align-items: end; max-width: 32rem; }
 .trip-ports label { display: block; line-height: 20px; margin-bottom: 3px; }
@@ -23,7 +24,8 @@
 .trip-swap:hover:not(:disabled), .trip-swap:active:not(:disabled) { background: #dfefe3; }
 .trip-swap:disabled, .trip-ports select:disabled { opacity: .55; cursor: default; }
 .trip-swap svg { width: 20px; height: 20px; }
-#trip-date { -webkit-appearance: none; appearance: none; max-width: 100%; text-align: center; }
+#trip-date { -webkit-appearance: none; appearance: none; width: 8.5rem; min-width: 0; max-width: 100%; height: 42px; padding: 0; border: 0; background: transparent; text-align: center; }
+#trip-date:focus-visible { outline: none; }
 #trip-date::-webkit-date-and-time-value { display: grid; align-content: center; height: 100%; min-width: 0; margin: 0; text-align: center; }
 .trip-service { margin-top: 4px; }
 .trip-booking { margin-top: 8px; padding: 10px; border-radius: 8px; background: #f8f0dc; color: #634b28; font-size: .85rem; line-height: 1.5; }
