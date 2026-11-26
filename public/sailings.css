@@ -5,8 +5,7 @@
 .trip-settings { padding: 4px 13px 10px; }
 .map-section h2 { font-family: 'Manrope', 'DM Sans', sans-serif; letter-spacing: -.04em; font-size: 1.25rem; }
 .trip-step { position: relative; }
-.trip-date-row, .trip-sailing-step { border-top: 1px solid #e4ede6; }
-.trip-step summary { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; padding-block: 8px; color: #30564c; font-weight: 800; font-size: .875rem; cursor: pointer; list-style: none; }
+.trip-step summary { display: flex; align-items: center; justify-content: center; min-height: 44px; padding-block: 8px; color: #30564c; font-weight: 800; font-size: .875rem; text-align: center; cursor: pointer; list-style: none; }
 .trip-step summary::-webkit-details-marker { display: none; }
 .trip-date-row { display: grid; grid-template-columns: fit-content(45%) minmax(0, 15rem); align-items: center; gap: 8px; padding-block: 4px; }
 #trip-date-weekday { color: #30564c; font-size: .875rem; font-weight: 800; }
