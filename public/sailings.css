@@ -16,15 +16,13 @@
 .trip-step-value { overflow-wrap: anywhere; font-weight: 700; color: var(--ink); }
 .trip-step-body { min-width: 0; padding-block: 4px; }
 .trip-settings label { font-size: .875rem; font-weight: 800; color: #34564d; }
-.trip-ports { display: grid; grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr); gap: 3px 6px; max-width: 32rem; }
-.trip-ports label { grid-row: 1; line-height: 20px; }
-.trip-ports label[for="trip-to"] { grid-column: 3; }
-.trip-port-field { grid-row: 2; position: relative; display: flex; align-items: center; min-height: 44px; padding: 5px 8px; border: 1px solid #d7e3da; border-radius: 7px; background: #f9fbf8; font-size: .9rem; line-height: 1.25; }
+.trip-ports { display: grid; grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr); gap: 6px; max-width: 32rem; }
+.trip-port-field { position: relative; display: flex; align-items: center; min-height: 44px; padding: 5px 8px; border: 1px solid #d7e3da; border-radius: 7px; background: #f9fbf8; font-size: .9rem; line-height: 1.25; }
 .trip-port-field select { width: 100%; min-width: 0; padding: 0; border: 0; background: transparent; color: inherit; font-size: 1rem; }
 .trip-port-value { overflow-wrap: anywhere; pointer-events: none; }
 .trip-port-value:not([hidden]) + select { position: absolute; inset: 0; height: 100%; opacity: 0; }
 .trip-port-field:focus-within { outline: 2px solid #147965; outline-offset: 2px; }
-.trip-swap { grid-area: 2 / 2; display: grid; place-items: center; min-height: 44px; padding: 0; border: 1px solid #d7e3da; border-radius: 7px; background: #edf5ee; color: #24594b; }
+.trip-swap { display: grid; place-items: center; min-height: 44px; padding: 0; border: 1px solid #d7e3da; border-radius: 7px; background: #edf5ee; color: #24594b; }
 .trip-swap:hover:not(:disabled), .trip-swap:active:not(:disabled) { background: #dfefe3; }
 .trip-swap:disabled, .trip-port-field:has(> select:disabled) { opacity: .55; }
 .trip-ports :disabled { cursor: default; }

@@ -45,16 +45,14 @@
             <summary hidden><span class="trip-step-value" id="trip-route-summary"></span></summary>
             <div class="trip-step-body">
               <div class="trip-ports">
-                <label for="trip-from">From</label>
                 <div class="trip-port-field">
                   <span class="trip-port-value" aria-hidden="true" hidden></span>
-                  <select id="trip-from"><option value="" selected disabled>Choose port</option></select>
+                  <select id="trip-from" aria-label="From"><option value="" selected disabled>Choose port</option></select>
                 </div>
                 <button type="button" class="trip-swap" id="trip-swap" aria-label="Swap ports" title="Swap ports" data-icon="swap" disabled></button>
-                <label for="trip-to">To</label>
                 <div class="trip-port-field">
                   <span class="trip-port-value" aria-hidden="true" hidden></span>
-                  <select id="trip-to" disabled><option value="" selected disabled>Choose port</option></select>
+                  <select id="trip-to" aria-label="To" disabled><option value="" selected disabled>Choose port</option></select>
                 </div>
               </div>
             </div>

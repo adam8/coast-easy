@@ -8,7 +8,7 @@ const paths = {
   install: '<path d="M12 3v11m-4-4 4 4 4-4M4 16v4h16v-4"/>',
   layers: '<path d="m12 3 9 5-9 5-9-5zM3 12l9 5 9-5m-18 4 9 5 9-5"/>',
   chevron: '<path d="m6 9 6 6 6-6"/>',
-  swap: '<path d="M4 7h16m-4-4 4 4-4 4M20 17H4m4-4-4 4 4 4"/>',
+  swap: '<path d="M4 12h16m-5-5 5 5-5 5"/>',
   right: '<path d="m9 6 6 6-6 6"/>',
   focus: '<circle cx="12" cy="12" r="6"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/>',
   map: '<path d="M9 17l-6 3V6l6-3 6 3 6-3v14l-6 3zM9 3v14m6-11v14"/>',
