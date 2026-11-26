@@ -182,7 +182,17 @@ function renderHistory(direction, now) {
   ]), 'Confirmed departures will appear here as reports come in.');
 }
 
+function renderPortValue(input) {
+  const display = input.previousElementSibling;
+  if (!display?.classList.contains('trip-port-value')) return;
+  const text = input.selectedOptions[0]?.text ?? blankDestination.text;
+  if (display.textContent !== text) display.textContent = text;
+  display.hidden = false;
+}
+
 function render() {
+  renderPortValue(fromInput);
+  renderPortValue(toInput);
   const direction = fromInput.value + toInput.value;
   const route = directions[direction];
   const date = dateInput.value;
