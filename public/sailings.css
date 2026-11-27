@@ -5,8 +5,8 @@
 .trip-settings { padding: 4px 13px 10px; }
 .map-section h2 { font-family: 'Manrope', 'DM Sans', sans-serif; letter-spacing: -.04em; font-size: 1.25rem; }
 .trip-date-row { display: flex; justify-content: center; padding-block: 4px; }
-.trip-date-field { display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center; column-gap: 6px; max-width: 100%; padding-inline: 10px; border: 1px solid #d7e3da; border-radius: 7px; background: #f9fbf8; cursor: pointer; }
-.trip-date-field:focus-within { outline: 2px solid #147965; outline-offset: 2px; }
+.trip-date-field { display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center; column-gap: 6px; max-width: 100%; min-height: 44px; padding-inline: 10px; border-radius: 7px; cursor: pointer; }
+.trip-date-field:has(> #trip-date:focus-visible) { outline: 2px solid #147965; outline-offset: 2px; }
 #trip-date-weekday, #trip-date, .trip-port-field { color: #30564c; font-size: .875rem; font-weight: 800; }
 .trip-settings label { font-size: .875rem; font-weight: 800; color: #34564d; }
 .trip-ports { display: grid; grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr); gap: 6px; max-width: 32rem; padding-block: 4px; }
@@ -88,7 +88,7 @@
     overflow: hidden auto;
     overscroll-behavior-y: contain;
     scrollbar-width: thin;
-    background: rgb(255 255 255 / 80%);
+    background: rgb(255 255 255 / 70%);
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     border: 1px solid #cfded5;
