@@ -6,7 +6,8 @@ import {
 const byId = (id) => document.getElementById(id);
 const fromInput = byId('trip-from');
 const toInput = byId('trip-to');
-const blankDestination = toInput.options[0];
+const portInputs = { from: fromInput, to: toInput };
+const portPlaceholders = { from: fromInput.options[0], to: toInput.options[0] };
 const swapPorts = byId('trip-swap');
 const dateInput = byId('trip-date');
 const pills = byId('trip-pills');
@@ -35,22 +36,32 @@ let updatedRoutes = new Set();
 let preferredDeparture = null;
 let renderedDay;
 let updateMap;
+let routeAnchor;
 
 dateInput.value = dateOf(localNow());
-const portOptions = Object.keys(terminals).map(portOption).sort((a, b) => a.text.localeCompare(b.text));
-fromInput.append(...portOptions);
-setDestinations();
+const allPorts = Object.keys(terminals).sort((a, b) => portName(a).localeCompare(portName(b)));
+setPortOptions('from', allPorts);
+setPortOptions('to', allPorts);
 
-function portOption(code) {
-  return new Option(portLabels[code] ?? terminals[code], code);
+function portName(code) {
+  return portLabels[code] ?? terminals[code];
 }
 
-function setDestinations(preferred = toInput.value) {
-  const destinations = Object.values(directions).filter(({ from }) => from === fromInput.value);
-  toInput.replaceChildren(blankDestination, ...destinations.map(({ to }) => portOption(to)));
-  toInput.disabled = destinations.length === 0;
-  toInput.value = destinations.find(({ to }) => to === preferred)?.to
-    ?? (destinations.length === 1 ? destinations[0].to : '');
+const oppositePort = (side) => side === 'from' ? 'to' : 'from';
+
+function setPortOptions(side, ports, preferred = portInputs[side].value) {
+  const input = portInputs[side];
+  input.replaceChildren(portPlaceholders[side], ...ports.map((code) => new Option(portName(code), code)));
+  input.value = ports.includes(preferred) ? preferred : ports.length === 1 ? ports[0] : '';
+}
+
+function setConnectedPorts(preferred) {
+  const otherSide = oppositePort(routeAnchor);
+  const anchorPort = portInputs[routeAnchor].value;
+  const connected = anchorPort ? Object.values(directions)
+    .filter((direction) => direction[routeAnchor] === anchorPort)
+    .map((direction) => direction[otherSide]) : allPorts;
+  setPortOptions(otherSide, connected, preferred);
 }
 
 function element(tag, text, className) {
@@ -336,15 +347,18 @@ pills.addEventListener('keydown', (event) => {
 });
 new ResizeObserver(updatePillTabStop).observe(pills);
 
-fromInput.addEventListener('change', () => {
-  setDestinations();
-  editPlan();
-});
-toInput.addEventListener('change', editPlan);
+for (const side of ['from', 'to']) {
+  portInputs[side].addEventListener('change', () => {
+    if (!routeAnchor || !portInputs[routeAnchor].value) routeAnchor = side;
+    if (routeAnchor === side) setConnectedPorts();
+    editPlan();
+  });
+}
 swapPorts.addEventListener('click', () => {
-  const origin = fromInput.value;
-  fromInput.value = toInput.value;
-  setDestinations(origin);
+  const swapped = { from: toInput.value, to: fromInput.value };
+  routeAnchor = oppositePort(routeAnchor);
+  setPortOptions(routeAnchor, allPorts, swapped[routeAnchor]);
+  setConnectedPorts(swapped[oppositePort(routeAnchor)]);
   editPlan();
 });
 dateInput.closest('label')?.addEventListener('click', (event) => {
