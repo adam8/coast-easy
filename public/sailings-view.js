@@ -183,7 +183,8 @@ function renderHistory(direction, now) {
 function renderPortValue(input) {
   const display = input.previousElementSibling;
   if (!display?.classList.contains('trip-port-value')) return;
-  const text = input.selectedOptions[0]?.text ?? input.options[0].text;
+  const label = input.selectedOptions[0]?.text ?? input.options[0].text;
+  const text = input.value ? label : label.replace(/ (from|to)$/, '\n$1');
   if (display.textContent !== text) display.textContent = text;
   display.hidden = false;
 }
