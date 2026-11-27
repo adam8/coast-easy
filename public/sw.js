@@ -1,5 +1,5 @@
 /* global self, caches */
-const cacheName = 'coast-easy-shell-v53';
+const cacheName = 'coast-easy-shell-v54';
 const assets = new Map([
   ['/', /text\/html/i],
   ['/app.js', /javascript/i],
