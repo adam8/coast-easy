@@ -242,20 +242,20 @@ function renderSpeed(report) {
   ctx.scale(ratio, ratio);
   const end = report?.position.time ?? state.now;
   const points = recentTrail(report?.trail ?? [], end).filter((point) => Number.isFinite(point.speed));
-  ctx.strokeStyle = '#e1e8e2';
+  ctx.strokeStyle = '#dce7f0';
   ctx.beginPath();
   ctx.moveTo(0, height - 3);
   ctx.lineTo(width, height - 3);
   ctx.stroke();
   if (points.length < 2) {
     ctx.font = '12px DM Sans, Arial, sans-serif';
-    ctx.fillStyle = '#647973';
+    ctx.fillStyle = '#576f84';
     ctx.fillText('Awaiting speed history', 0, 22);
     return;
   }
   const maxSpeed = Math.max(8, ...points.map(({ speed }) => speed)) * 1.12;
   let previous = null;
-  ctx.strokeStyle = '#177965';
+  ctx.strokeStyle = '#17558f';
   ctx.lineWidth = 1.8;
   ctx.lineJoin = 'round';
   ctx.beginPath();
@@ -495,29 +495,29 @@ function addMarineLayers() {
   map.addLayer({
     id: 'route-lines', source: 'routes', type: 'line',
     layout: { 'line-cap': 'round', 'line-join': 'round' },
-    paint: { 'line-color': '#527d77', 'line-width': ['interpolate', ['linear'], ['zoom'], 5, 1, 9, 1.4, 14, 2], 'line-dasharray': [2, 2.7], 'line-opacity': .38 },
+    paint: { 'line-color': '#527796', 'line-width': ['interpolate', ['linear'], ['zoom'], 5, 1, 9, 1.4, 14, 2], 'line-dasharray': [2, 2.7], 'line-opacity': .38 },
   });
   map.addLayer({
     id: 'route-selected', source: 'routes', type: 'line',
     filter: ['==', ['get', 'id'], ''],
     layout: { 'line-cap': 'round', 'line-join': 'round' },
-    paint: { 'line-color': '#137a6c', 'line-width': 2.5, 'line-opacity': .76, 'line-dasharray': [1.6, 2] },
+    paint: { 'line-color': '#527796', 'line-width': 2.5, 'line-opacity': .76, 'line-dasharray': [1.6, 2] },
   });
   map.addLayer({
     id: 'route-planned-outline', source: 'planned-crossing', type: 'line',
     layout: { 'line-cap': 'round', 'line-join': 'round' },
-    paint: { 'line-color': '#f7faf2', 'line-width': 6, 'line-opacity': .9 },
+    paint: { 'line-color': '#f6faff', 'line-width': 6, 'line-opacity': .9 },
   });
   map.addLayer({
     id: 'route-planned', source: 'planned-crossing', type: 'line',
     layout: { 'line-cap': 'round', 'line-join': 'round' },
-    paint: { 'line-color': '#076454', 'line-width': 3.5 },
+    paint: { 'line-color': '#17558f', 'line-width': 3.5 },
   });
   map.addLayer({
     id: 'wakes', source: 'wakes', type: 'line',
     layout: { 'line-cap': 'round', 'line-join': 'round' },
     paint: {
-      'line-color': ['case', ['get', 'selected'], '#00614f', '#239886'],
+      'line-color': ['case', ['get', 'selected'], '#104477', '#397eae'],
       'line-width': ['case', ['get', 'selected'], 4, 2.8],
       'line-opacity': ['interpolate', ['linear'], ['get', 'freshness'], 0, .07, 1, .95],
     },
@@ -526,7 +526,7 @@ function addMarineLayers() {
     id: 'terminal-points', source: 'terminals', type: 'circle',
     paint: {
       'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 1.75, 8, 2.75, 12, 4],
-      'circle-color': '#f5fbf5', 'circle-stroke-color': '#527d77', 'circle-stroke-width': 1.25, 'circle-stroke-opacity': .75,
+      'circle-color': '#f5faff', 'circle-stroke-color': '#527796', 'circle-stroke-width': 1.25, 'circle-stroke-opacity': .75,
     },
   });
   const terminalText = {
@@ -538,16 +538,16 @@ function addMarineLayers() {
   map.addLayer({
     id: 'terminal-labels', source: 'terminals', type: 'symbol', minzoom: 9,
     layout: { ...terminalText, 'text-size': ['interpolate', ['linear'], ['zoom'], 9, 11, 13, 13] },
-    paint: { 'text-color': '#5b7670', 'text-halo-color': '#eef5ec', 'text-halo-width': 1.4 },
+    paint: { 'text-color': '#506a80', 'text-halo-color': '#eef2f5', 'text-halo-width': 1.4 },
   });
   map.addLayer({
     id: 'planned-terminal-points', source: 'terminals', type: 'circle',
-    paint: { 'circle-radius': 4.5, 'circle-color': '#f5fbf5', 'circle-stroke-color': '#076454', 'circle-stroke-width': 2 },
+    paint: { 'circle-radius': 4.5, 'circle-color': '#f5faff', 'circle-stroke-color': '#17558f', 'circle-stroke-width': 2 },
   });
   map.addLayer({
     id: 'planned-terminal-labels', source: 'terminals', type: 'symbol',
     layout: { ...terminalText, 'text-size': 13, 'text-allow-overlap': true },
-    paint: { 'text-color': '#12483e', 'text-halo-color': '#f7faf2', 'text-halo-width': 2 },
+    paint: { 'text-color': '#163d63', 'text-halo-color': '#f6faff', 'text-halo-width': 2 },
   });
   updateCrossingLayers();
   setRoutesVisibility();
@@ -567,8 +567,8 @@ function coastStyle() {
     version: 8,
     sources: { coastline: { type: 'geojson', data: '/coast.json', attribution: 'Natural Earth' } },
     layers: [
-      { id: 'water', type: 'background', paint: { 'background-color': '#c8dee2' } },
-      { id: 'land', type: 'fill', source: 'coastline', paint: { 'fill-color': '#eff2eb', 'fill-outline-color': '#c1cdc4' } },
+      { id: 'water', type: 'background', paint: { 'background-color': '#c8dff0' } },
+      { id: 'land', type: 'fill', source: 'coastline', paint: { 'fill-color': '#eef2f5', 'fill-outline-color': '#bccbd6' } },
     ],
   };
 }

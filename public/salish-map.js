@@ -111,26 +111,26 @@ export async function salishBasemap(saved) {
       },
     },
     layers: [
-      { id: 'ocean', type: 'background', paint: { 'background-color': '#c8dee2' } },
+      { id: 'ocean', type: 'background', paint: { 'background-color': '#c8dff0' } },
       {
         id: 'land', type: 'fill', source: 'salish', 'source-layer': 'earth',
-        paint: { 'fill-color': '#eff2eb' },
+        paint: { 'fill-color': '#eef2f5' },
       },
       {
         id: 'woodland', type: 'fill', source: 'salish', 'source-layer': 'landcover', minzoom: 8,
         filter: ['in', ['get', 'kind'], ['literal', ['forest', 'wood', 'grassland']]],
-        paint: { 'fill-color': '#e3ebe1', 'fill-opacity': .65 },
+        paint: { 'fill-color': '#e3ebef', 'fill-opacity': .65 },
       },
       {
         id: 'water', type: 'fill', source: 'salish', 'source-layer': 'water',
         filter: ['==', ['geometry-type'], 'Polygon'],
-        paint: { 'fill-color': '#c8dee2' },
+        paint: { 'fill-color': '#c8dff0' },
       },
       {
         id: 'main-roads', type: 'line', source: 'salish', 'source-layer': 'roads', minzoom: 11,
         filter: ['in', ['get', 'kind'], ['literal', ['highway', 'major_road', 'medium_road']]],
         layout: { 'line-cap': 'round' },
-        paint: { 'line-color': '#adbbb2', 'line-opacity': .48, 'line-width': ['interpolate', ['linear'], ['zoom'], 11, .65, 14, 2] },
+        paint: { 'line-color': '#aebdca', 'line-opacity': .48, 'line-width': ['interpolate', ['linear'], ['zoom'], 11, .65, 14, 2] },
       },
       {
         id: 'place-names', type: 'symbol', source: 'salish', 'source-layer': 'places', minzoom: 6,
@@ -141,7 +141,7 @@ export async function salishBasemap(saved) {
           'text-size': ['interpolate', ['linear'], ['zoom'], 6, 11, 13, 13],
           'symbol-sort-key': ['coalesce', ['get', 'min_zoom'], 15],
         },
-        paint: { 'text-color': '#5b726b', 'text-halo-color': '#eff2eb', 'text-halo-width': 1.3 },
+        paint: { 'text-color': '#52697b', 'text-halo-color': '#eef2f5', 'text-halo-width': 1.3 },
       },
     ],
   };
