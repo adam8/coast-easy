@@ -72,7 +72,7 @@
   :root {
     --map-gutter-left: max(10px, env(safe-area-inset-left));
     --map-gutter-right: max(10px, env(safe-area-inset-right));
-    --map-controls-bottom: max(31px, calc(env(safe-area-inset-bottom) + 26px));
+    --map-card-bottom: max(31px, calc(env(safe-area-inset-bottom) + 26px));
   }
   html, body { overflow: hidden; overscroll-behavior: none; }
   body { height: 100dvh; }

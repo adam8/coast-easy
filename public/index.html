@@ -21,12 +21,12 @@
   <header class="masthead">
     <a class="brand" href="/" aria-label="Coast Easy home">
       <span class="brand-mark" data-icon="water"></span>
-      <span>Coast Easy</span>
+      <span class="brand-name">Coast Easy</span>
     </a>
     <span class="masthead-divider"></span>
     <span class="masthead-context">British Columbia</span>
     <div class="masthead-actions">
-      <span class="feed-badge" id="feed-badge" role="status"><i></i><span id="feed-label">Connecting</span></span>
+      <span class="feed-badge" id="feed-badge" role="status"><i></i><span id="feed-label">Connecting</span><span class="compact-feed-label" id="compact-feed-label" aria-hidden="true">Syncing</span></span>
       <button class="replay-toggle" id="replay-toggle" type="button" hidden>
         <span data-icon="pause"></span><span id="replay-label">Pause</span>
       </button>
@@ -118,7 +118,7 @@
                 <span data-icon="chevron"></span>
               </label>
             </div>
-            <div class="map-actions">
+            <div class="map-actions" id="map-view-actions">
               <button type="button" class="map-button icon-only" id="map-options-toggle" aria-label="Map options" aria-haspopup="dialog" aria-controls="map-options" aria-expanded="false">
                 <span data-icon="layers"></span>
               </button>

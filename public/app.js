@@ -26,6 +26,7 @@ const planner = byId('sailings');
 const plannerLayout = planner.querySelector('.sailings-layout');
 const mapContainer = byId('map');
 const mapToolbar = byId('map-toolbar');
+const mapViewActions = byId('map-view-actions');
 const mapSectionHeader = byId('map-view').querySelector('.map-section-header');
 const sailingSummary = byId('map-sailing');
 const mapMessage = byId('map-message');
@@ -53,6 +54,14 @@ const feedLabels = {
   connected: 'AIS connected',
   reconnecting: 'Feed disconnected',
   'subscription-error': 'AIS key or feed error',
+};
+const compactFeedLabels = {
+  replay: 'Demo',
+  offline: 'Offline',
+  connecting: 'Syncing',
+  connected: 'Live',
+  reconnecting: 'No signal',
+  'subscription-error': 'Feed error',
 };
 
 const state = {
@@ -219,6 +228,7 @@ function renderFeed() {
   const status = state.offline ? 'offline' : state.feed;
   feedBadge.dataset.feed = status;
   byId('feed-label').textContent = feedLabels[status] ?? 'Connecting';
+  byId('compact-feed-label').textContent = compactFeedLabels[status] ?? 'Syncing';
   const toggle = byId('replay-toggle');
   toggle.hidden = state.mode !== 'replay';
   toggle.firstElementChild.innerHTML = icon(state.paused ? 'play' : 'pause');
@@ -389,7 +399,9 @@ function selectVessel(id, moveMap) {
 function compactMapPadding() {
   const view = mapContainer.getBoundingClientRect();
   const card = planner.getBoundingClientRect();
-  const bottom = Math.min(view.bottom - mapToolbar.getBoundingClientRect().top + 10, view.height * .32);
+  const attribution = mapContainer.querySelector('.maplibregl-ctrl-attrib');
+  const attributionTop = attribution?.getBoundingClientRect().top ?? view.bottom;
+  const bottom = Math.min(Math.max(24, view.bottom - attributionTop + 10), view.height * .32);
   return {
     top: sidePlanner.matches ? 19 : Math.max(16, Math.min(card.bottom - view.top + 20, view.height - bottom - 48)),
     right: 54,
@@ -874,6 +886,7 @@ function syncDrawerLayout() {
     drawerPanel.append(...drawerEntries.map(({ content }) => content));
     showDrawerView();
     byId('compact-map-controls').append(regionControl);
+    menuToggle.before(mapViewActions);
     byId('trip-service').before(sailingSummary);
     plannerLayout.append(mapMessage);
   } else {
@@ -884,6 +897,7 @@ function syncDrawerLayout() {
       content.hidden = false;
     }
     byId('desktop-map-controls').append(regionControl);
+    mapToolbar.append(mapViewActions);
     mapSectionHeader.append(sailingSummary);
     mapToolbar.after(mapMessage);
   }

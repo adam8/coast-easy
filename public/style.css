@@ -76,6 +76,7 @@ svg { width: 19px; height: 19px; vertical-align: middle; }
 .feed-badge i { width: 7px; height: 7px; border-radius: 50%; background: #e9bd69; }
 .feed-badge[data-feed="connected"] { background: #8cc3f81b; border-color: #8cc3f85c; color: #d2eaff; }
 .feed-badge[data-feed="connected"] i { background: #96cdff; }
+.compact-feed-label { display: none; }
 .replay-toggle, .install-toggle { color: #e4eef9; border: 1px solid #54728e; background: transparent; }
 .replay-toggle:hover, .install-toggle:hover { background: #294969; }
 .replay-toggle svg, .install-toggle svg { width: 16px; height: 16px; }
@@ -200,18 +201,18 @@ h1, .fleet-top h3 { margin: 6px 0 0; font-family: 'Manrope', 'DM Sans', sans-ser
 }
 @media (max-width: 710px), (max-width: 950px) and (max-height: 500px) {
   :root { --header-height: 57px; }
-  .masthead { padding: 0 12px; gap: 8px; }
+  .masthead { padding-inline: max(8px, env(safe-area-inset-left)) max(8px, env(safe-area-inset-right)); gap: 4px; }
   .brand { gap: 7px; min-width: 0; font-size: 1.075rem; }
-  .brand > span:last-child { overflow: hidden; text-overflow: ellipsis; }
+  .brand-name { overflow: hidden; text-overflow: ellipsis; }
   .brand-mark { width: 30px; height: 30px; border-radius: 7px; flex-shrink: 0; }
   .brand-mark svg { width: 18px; height: 18px; }
   .masthead-divider, .masthead-context { display: none; }
-  .masthead-actions { gap: 6px; }
-  .feed-badge, .replay-toggle, .install-toggle { height: 30px; font-size: .78rem; padding: 0 7px; gap: 4px; }
+  .masthead-actions, .masthead-actions .map-actions { gap: 4px; }
+  .feed-badge, .replay-toggle, .install-toggle { height: 30px; font-size: .78rem; padding: 0 6px; gap: 4px; }
   .install-label { display: none; }
   .workspace > .fleet-panel { display: none; }
-  .menu-toggle { display: grid; place-items: center; width: 36px; height: 34px; padding: 0; border: 1px solid #54728e; border-radius: 7px; background: transparent; color: #e4eef9; }
-  .menu-toggle:hover { background: #294969; }
+  .masthead-actions .map-button, .menu-toggle { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid #54728e; border-radius: 7px; background: transparent; box-shadow: none; color: #e4eef9; }
+  .masthead-actions .map-button:hover, .menu-toggle:hover { background: #294969; }
   .app-drawer[open] { position: fixed; inset: 0 0 0 auto; display: flex; flex-direction: column; margin: 0; padding: 0; border: 0; width: min(350px, calc(100% - 32px)); height: 100%; max-width: none; max-height: none; background: var(--paper); color: var(--ink); overflow: hidden; box-shadow: -8px 0 32px #142c4837; }
   .app-drawer::backdrop { background: transparent; }
   .drawer-header { display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
@@ -231,20 +232,22 @@ h1, .fleet-top h3 { margin: 6px 0 0; font-family: 'Manrope', 'DM Sans', sans-ser
   .app-drawer :is(.section-label, #fleet-title) { display: none; }
   .fleet-list { min-height: min(120px, 24dvh); overscroll-behavior-y: contain; }
   .fleet-top { padding-top: 17px; }
-  .map-toolbar { left: auto; right: var(--map-gutter-right); top: auto; bottom: var(--map-controls-bottom); }
-  .map-actions { gap: 5px; }
-  .map-actions .map-button, .map-options-header .map-button { height: 44px; }
-  .map-actions .icon-only, .map-options-header .icon-only { width: 44px; }
+  .map-toolbar { display: none; }
+  .map-options-header .map-button { width: 44px; height: 44px; }
   .maplibregl-ctrl-top-right, #desktop-map-controls { display: none; }
   .maplibregl-ctrl-bottom-right { right: var(--map-gutter-right); bottom: max(3px, env(safe-area-inset-bottom)); }
-  .map-options-dialog { inset: auto var(--map-gutter-right, 10px) var(--map-controls-bottom, 30px) auto; margin: 0; max-height: calc(100% - 54px); }
+  .map-options-dialog { inset: calc(var(--header-height) + 8px) var(--map-gutter-right) auto auto; margin: 0; max-height: calc(100% - var(--header-height) - 16px - env(safe-area-inset-bottom)); }
   .map-options-zoom { display: flex; }
-  .vessel-card { bottom: calc(var(--map-controls-bottom) + 52px); left: var(--map-gutter-left); width: min(340px, calc(100% - 24px)); max-height: min(225px, max(50px, calc(100% - var(--planner-depth, 0px) - var(--map-controls-bottom) - 62px))); overflow-y: auto; }
+  .vessel-card { bottom: var(--map-card-bottom); left: var(--map-gutter-left); width: min(340px, calc(100% - 24px)); max-height: min(225px, max(50px, calc(100% - var(--planner-depth, 0px) - var(--map-card-bottom) - 10px))); overflow-y: auto; }
   .map-key { display: none; }
   .region-select select { width: 125px; padding-inline: 30px 22px; }
 }
+@media (max-width: 520px) {
+  #feed-label, #replay-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .compact-feed-label { display: inline; }
+}
 @media (max-width: 420px) {
-  #replay-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .masthead:has(#replay-toggle:not([hidden])):has(#install-toggle:not([hidden])) .brand-name { display: none; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .app-drawer[open] { animation: drawer-slide-in 220ms ease-out; }
@@ -252,10 +255,9 @@ h1, .fleet-top h3 { margin: 6px 0 0; font-family: 'Manrope', 'DM Sans', sans-ser
 @keyframes drawer-slide-in {
   from { transform: translateX(100%); }
 }
-@media (max-width: 360px) {
-  .masthead { padding-inline: 8px; gap: 4px; }
-  .brand { font-size: 1rem; }
-  .masthead-actions { gap: 4px; }
+@media (max-width: 375px) {
+  .brand-name { display: none; }
+  .masthead-actions { gap: 3px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; }
