@@ -97,11 +97,14 @@
     box-shadow: 0 3px 14px #173c6227;
   }
   .sailings-layout { margin-bottom: 0; }
-  .trip-settings { border: 0; padding-bottom: 7px; background: transparent; }
+  .trip-settings { border: 0; padding-block: 3px 5px; background: transparent; }
+  .trip-ports { padding-block: 2px; }
+  .trip-date-row { padding-block: 1px; }
+  .trip-sailing-step { padding-top: 4px; }
   .trip-pill { min-width: 0; padding: 5px 8px; white-space: normal; }
   .trip-pill-times { display: grid; line-height: 1.15; white-space: nowrap; }
   .trip-pill-status { align-self: stretch; contain: inline-size; overflow-wrap: anywhere; }
-  .trip-service { margin-top: 0; padding: 0 13px 8px; }
+  .trip-service { margin-top: 0; padding: 0 13px 6px; }
   .map-section { display: flex; flex-direction: column; min-height: 0; }
   .map-section-header { display: block; margin: 0; }
   .map-section-header > div { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
