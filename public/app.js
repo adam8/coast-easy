@@ -304,6 +304,12 @@ function filteredMarkers(vessel, report) {
   return filter && search;
 }
 
+function updateVesselMarkerScale() {
+  const progress = Math.max(0, Math.min(1, (map.getZoom() - 5) / (12 - 5)));
+  const scale = .4 + progress * (1.45 - .4);
+  map.getCanvasContainer().style.setProperty('--vessel-marker-scale', String(scale));
+}
+
 function positionMarker(vessel, position, status) {
   let item = markers.get(vessel.id);
   if (!item) {
@@ -312,17 +318,21 @@ function positionMarker(vessel, position, status) {
     element.className = 'marker';
     element.title = vessel.name;
     element.setAttribute('aria-label', 'Select ' + vessel.name);
+    const symbol = document.createElement('span');
+    symbol.className = 'marker-symbol';
+    symbol.setAttribute('aria-hidden', 'true');
+    element.append(symbol);
     element.addEventListener('click', (event) => {
       event.stopPropagation();
       selectVessel(vessel.id, false);
     });
     const marker = new maplibregl.Marker({ element, rotationAlignment: 'map' });
-    item = { marker, element };
+    item = { marker, element, symbol };
     markers.set(vessel.id, item);
   }
   if (item.element.dataset.status !== status) {
     item.element.dataset.status = status;
-    item.element.innerHTML = status === 'still' ? icon('anchor') : '<span class="pointer"></span>';
+    item.symbol.innerHTML = status === 'still' ? icon('anchor') : '<span class="pointer"></span>';
   }
   item.element.classList.toggle('is-selected', state.selected === vessel.id);
   item.marker.setLngLat([position.lon, position.lat]).setRotation(status === 'still' ? 0 : (position.course ?? position.heading ?? 0));
@@ -673,7 +683,9 @@ function initMap() {
     return;
   }
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+  map.on('zoom', updateVesselMarkerScale);
   fitMap();
+  updateVesselMarkerScale();
   map.on('movestart', (event) => { if (event.originalEvent) cameraFocus = null; });
   map.on('error', (event) => {
     if (activeBasemap.startsWith('salish') && event.sourceId === 'salish') useFallbackMap();

@@ -166,13 +166,39 @@ h1, .fleet-top h3 { margin: 6px 0 0; font-family: 'Manrope', 'DM Sans', sans-ser
 #map-download-status { font-size: .8125rem; color: var(--muted); }
 #map-download-status:empty, .compact-map-controls:empty { display: none; }
 
-.marker { isolation: isolate; display: grid; place-items: center; padding: 0; width: 29px; height: 29px; border: 2px solid #f8fbff; border-radius: 50%; color: #f4faff; background: var(--accent); box-shadow: 0 2px 5px #173c626b; }
+.marker {
+  --marker-size: 29px;
+  --marker-target-size: max(24px, calc(var(--marker-size) * var(--vessel-marker-scale, 1)));
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  width: var(--marker-target-size);
+  height: var(--marker-target-size);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+}
+.marker-symbol {
+  display: grid;
+  place-items: center;
+  width: var(--marker-size);
+  height: var(--marker-size);
+  border: 2px solid #f8fbff;
+  border-radius: 50%;
+  color: #f4faff;
+  background: var(--accent);
+  box-shadow: 0 2px 5px #173c626b;
+  transform: scale(var(--vessel-marker-scale, 1));
+  pointer-events: none;
+}
 .marker .pointer { width: 12px; height: 14px; background: currentColor; clip-path: polygon(50% 0, 100% 94%, 50% 72%, 0 94%); }
-.marker[data-status="still"] { color: #fffaf0; background: #a66430; }
-.marker[data-status="stale"] { background: #688099; opacity: .68; }
+.marker[data-status="still"] .marker-symbol { color: #fffaf0; background: #a66430; }
+.marker[data-status="stale"] .marker-symbol { background: #688099; opacity: .68; }
 .marker[data-status="still"] svg { width: 15px; height: 15px; }
-.marker.is-selected { z-index: 1; width: 34px; height: 34px; background: #153f6d; box-shadow: 0 0 0 4px #daeaff, 0 2px 6px #173c6277; }
-.marker:hover { filter: brightness(1.1); }
+.marker.is-selected { z-index: 1; --marker-size: 34px; }
+.marker.is-selected .marker-symbol { background: #153f6d; box-shadow: 0 0 0 4px #daeaff, 0 2px 6px #173c6277; }
+.marker:hover .marker-symbol { filter: brightness(1.1); }
 .vessel-card { position: absolute; left: 17px; bottom: 24px; width: min(340px, calc(100% - 34px)); z-index: 2; padding: 13px 14px 11px; background: var(--control-surface); border: 1px solid var(--line); border-radius: 11px; box-shadow: 0 5px 20px #173c6230; }
 .card-top { display: grid; grid-template-columns: 38px minmax(0, 1fr) 25px; gap: 9px; align-items: center; }
 .card-avatar { display: grid; place-items: center; height: 38px; width: 38px; border-radius: 9px; background: var(--accent-soft); color: var(--accent-ink); }
