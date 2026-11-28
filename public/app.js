@@ -564,7 +564,7 @@ function addMarineLayers() {
     id: 'terminal-labels', source: 'terminals', type: 'symbol',
     layout: {
       ...terminalText,
-      'text-size': ['interpolate', ['linear'], ['zoom'], 5, 9, 9, 10, 13, 12],
+      'text-size': ['interpolate', ['linear'], ['zoom'], 5, 9, 9, 10, 13, 13.5, 16, 14.5],
       'text-variable-anchor': ['top', 'bottom', 'left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right'],
       'text-padding': 2,
       'symbol-sort-key': ['case', ['==', ['get', 'label'], true], 0, 1],
@@ -580,7 +580,11 @@ function addMarineLayers() {
   });
   map.addLayer({
     id: 'planned-terminal-labels', source: 'terminals', type: 'symbol',
-    layout: { ...terminalText, 'text-size': 13, 'text-allow-overlap': true },
+    layout: {
+      ...terminalText,
+      'text-size': ['interpolate', ['linear'], ['zoom'], 9, 13, 13, 15, 16, 16.5],
+      'text-allow-overlap': true,
+    },
     paint: { 'text-color': '#163d63', 'text-halo-color': '#f6faff', 'text-halo-width': 2 },
   });
   updateCrossingLayers();
