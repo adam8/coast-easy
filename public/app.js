@@ -305,8 +305,10 @@ function filteredMarkers(vessel, report) {
 }
 
 function updateVesselMarkerScale() {
-  const progress = Math.max(0, Math.min(1, (map.getZoom() - 5) / (12 - 5)));
-  const scale = .4 + progress * (1.45 - .4);
+  const zoom = map.getZoom();
+  const overviewProgress = Math.max(0, Math.min(1, (zoom - 5) / (9 - 5)));
+  const closeProgress = Math.max(0, Math.min(1, (zoom - 9) / (12 - 9)));
+  const scale = .4 + overviewProgress * .6 + closeProgress * .15;
   map.getCanvasContainer().style.setProperty('--vessel-marker-scale', String(scale));
 }
 
