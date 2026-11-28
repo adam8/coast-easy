@@ -10,6 +10,8 @@ const portInputs = { from: fromInput, to: toInput };
 const portPlaceholders = { from: fromInput.options[0], to: toInput.options[0] };
 const swapPorts = byId('trip-swap');
 const dateInput = byId('trip-date');
+const dateWeekday = byId('trip-date-weekday');
+const miniCalendar = byId('trip-mini-calendar');
 const pills = byId('trip-pills');
 const pillsMessage = byId('trip-pills-message');
 const drawerConditionsLink = byId('drawer-conditions-link');
@@ -35,6 +37,7 @@ let refreshInProgress = false;
 let updatedRoutes = new Set();
 let preferredDeparture = null;
 let renderedDay;
+let displayedDate;
 let updateMap;
 let routeAnchor;
 
@@ -200,6 +203,31 @@ function renderPortValue(input) {
   display.hidden = false;
 }
 
+function renderDate(date, start) {
+  if (date === displayedDate) return;
+  displayedDate = date;
+  dateWeekday.textContent = start === null ? 'Choose a day' : weekdayName(start);
+  if (!miniCalendar) return;
+  miniCalendar.hidden = start === null;
+  if (start === null) {
+    miniCalendar.replaceChildren();
+    return;
+  }
+
+  const month = new Date(date + 'T00:00:00Z');
+  const selectedDay = month.getUTCDate();
+  month.setUTCDate(1);
+  const firstColumn = month.getUTCDay() + 1;
+  month.setUTCMonth(month.getUTCMonth() + 1, 0);
+  const days = Array.from({ length: month.getUTCDate() }, (_, index) => {
+    const dot = element('span', '', 'trip-calendar-day');
+    dot.classList.toggle('is-selected', index + 1 === selectedDay);
+    return dot;
+  });
+  days[0].style.gridColumnStart = String(firstColumn);
+  miniCalendar.replaceChildren(...days);
+}
+
 function render() {
   renderPortValue(fromInput);
   renderPortValue(toInput);
@@ -210,7 +238,7 @@ function render() {
   const now = Date.now();
   const online = navigator.onLine && updatedRoutes.has(direction);
   swapPorts.disabled = !route;
-  byId('trip-date-weekday').textContent = start === null ? 'Choose a day' : weekdayName(start);
+  renderDate(date, start);
   const validDate = schedule && start !== null && date >= schedule.validFrom && date <= schedule.validTo;
   const trips = route && validDate ? timetable(schedule, direction, date, conditions, now, online) : [];
   const chosen = trips.find((trip) => trip.selectable && trip.scheduled === preferredDeparture)

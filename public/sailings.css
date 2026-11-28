@@ -5,7 +5,7 @@
 .trip-settings { padding: 4px 13px 10px; }
 .map-section h2 { font-family: 'Manrope', 'DM Sans', sans-serif; letter-spacing: -.04em; font-size: 1.25rem; }
 .trip-date-row { display: flex; justify-content: center; padding-block: 4px; }
-.trip-date-field { display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center; column-gap: 6px; max-width: 100%; min-height: 44px; padding-inline: 10px; border-radius: 7px; cursor: pointer; }
+.trip-date-field { display: inline-flex; align-items: center; justify-content: center; gap: 6px; max-width: 100%; min-height: 44px; padding-inline: 8px; border-radius: 7px; cursor: pointer; }
 .trip-date-field:has(> #trip-date:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
 #trip-date-weekday, #trip-date, .trip-port-field { color: var(--accent-ink); font-size: .9375rem; font-weight: 800; }
 .trip-settings label { font-size: .875rem; font-weight: 800; color: var(--accent-ink); }
@@ -24,6 +24,19 @@
 #trip-date { -webkit-appearance: none; appearance: none; width: 7.25rem; min-width: 0; max-width: 100%; height: 42px; padding: 0; border: 0; background: transparent; text-align: start; }
 #trip-date:focus-visible { outline: none; }
 #trip-date::-webkit-date-and-time-value { display: grid; align-content: center; height: 100%; min-width: 0; margin: 0; text-align: start; }
+.trip-mini-calendar {
+  display: grid;
+  flex: none;
+  grid-template-columns: repeat(7, 4px);
+  grid-auto-rows: 4px;
+  gap: 1px;
+  min-height: 29px;
+  align-content: center;
+  place-items: center;
+  pointer-events: none;
+}
+.trip-calendar-day { width: 3px; height: 3px; border-radius: 50%; background: #9bb0c5; }
+.trip-calendar-day.is-selected { width: 5px; height: 5px; background: var(--accent-ink); }
 .trip-service { margin-top: 4px; }
 .trip-booking { margin-top: 8px; padding: 10px; border-radius: 8px; background: #f8f0dc; color: #634b28; font-size: .85rem; line-height: 1.5; }
 .trip-booking a, .trip-sources a { color: inherit; text-underline-offset: 3px; font-weight: 700; }
@@ -68,7 +81,7 @@
 @media (min-width: 711px) and (min-height: 501px), (min-width: 951px) {
   .trip-criteria { display: flex; justify-content: center; align-items: center; gap: 16px; }
   .trip-ports { flex: 1 1 32rem; min-width: 0; }
-  .trip-date-field { flex-wrap: nowrap; white-space: nowrap; }
+  .trip-date-field { white-space: nowrap; }
 }
 @media (max-width: 760px) {
   .sailings-layout { margin-bottom: 18px; }
