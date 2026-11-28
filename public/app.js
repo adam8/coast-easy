@@ -507,7 +507,7 @@ function updateCrossingLayers() {
   const names = [tripPorts?.from, tripPorts?.to].filter(Boolean);
   const isPlanned = ['in', ['get', 'name'], ['literal', names]];
   map.setFilter('terminal-points', ['!', isPlanned]);
-  map.setFilter('terminal-labels', ['all', ['==', ['get', 'label'], true], ['!', isPlanned]]);
+  map.setFilter('terminal-labels', ['!', isPlanned]);
   map.setFilter('planned-terminal-points', isPlanned);
   map.setFilter('planned-terminal-labels', isPlanned);
 }
@@ -561,9 +561,15 @@ function addMarineLayers() {
     'text-radial-offset': .68, 'text-padding': 4, 'text-max-width': 14,
   };
   map.addLayer({
-    id: 'terminal-labels', source: 'terminals', type: 'symbol', minzoom: 9,
-    layout: { ...terminalText, 'text-size': ['interpolate', ['linear'], ['zoom'], 9, 11, 13, 13] },
-    paint: { 'text-color': '#506a80', 'text-halo-color': '#eef2f5', 'text-halo-width': 1.4 },
+    id: 'terminal-labels', source: 'terminals', type: 'symbol',
+    layout: {
+      ...terminalText,
+      'text-size': ['interpolate', ['linear'], ['zoom'], 5, 9, 9, 10, 13, 12],
+      'text-variable-anchor': ['top', 'bottom', 'left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right'],
+      'text-padding': 2,
+      'symbol-sort-key': ['case', ['==', ['get', 'label'], true], 0, 1],
+    },
+    paint: { 'text-color': '#36546f', 'text-halo-color': '#eef2f5', 'text-halo-width': 1.4 },
   });
   map.addLayer({
     id: 'planned-terminal-points', source: 'terminals', type: 'circle',
