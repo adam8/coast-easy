@@ -206,7 +206,7 @@ function renderPortValue(input) {
 function renderDate(date, start) {
   if (date === displayedDate) return;
   displayedDate = date;
-  dateWeekday.textContent = start === null ? 'Choose a day' : weekdayName(start);
+  dateWeekday.textContent = start === null ? 'Choose a day' : weekdayName(start) + ',';
   if (!miniCalendar) return;
   miniCalendar.hidden = start === null;
   if (start === null) {
