@@ -65,6 +65,11 @@
 .trip-table small { display: block; color: var(--muted); margin-top: 3px; }
 .trip-table-message { padding: 13px 15px; font-size: .9rem; color: var(--muted); }
 .trip-sources { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--accent-ink); margin-top: 14px; font-size: .84rem; }
+@media (min-width: 711px) and (min-height: 501px), (min-width: 951px) {
+  .trip-criteria { display: flex; justify-content: center; align-items: center; gap: 16px; }
+  .trip-ports { flex: 1 1 32rem; min-width: 0; }
+  .trip-date-field { flex-wrap: nowrap; white-space: nowrap; }
+}
 @media (max-width: 760px) {
   .sailings-layout { margin-bottom: 18px; }
 }

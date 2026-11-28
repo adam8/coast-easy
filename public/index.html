@@ -41,22 +41,24 @@
     <section id="sailings" aria-label="Sailing planner">
       <div class="sailings-layout">
         <section class="trip-settings" aria-label="Trip settings">
-          <div class="trip-ports">
-            <div class="trip-port-field">
-              <span class="trip-port-value" aria-hidden="true" hidden></span>
-              <select id="trip-from" aria-label="From"><option value="" selected disabled>Choose ferry from</option></select>
+          <div class="trip-criteria">
+            <div class="trip-ports">
+              <div class="trip-port-field">
+                <span class="trip-port-value" aria-hidden="true" hidden></span>
+                <select id="trip-from" aria-label="From"><option value="" selected disabled>Choose ferry from</option></select>
+              </div>
+              <button type="button" class="trip-swap" id="trip-swap" aria-label="Swap ports" title="Swap ports" data-icon="swap" disabled></button>
+              <div class="trip-port-field">
+                <span class="trip-port-value" aria-hidden="true" hidden></span>
+                <select id="trip-to" aria-label="To"><option value="" selected disabled>Choose ferry to</option></select>
+              </div>
             </div>
-            <button type="button" class="trip-swap" id="trip-swap" aria-label="Swap ports" title="Swap ports" data-icon="swap" disabled></button>
-            <div class="trip-port-field">
-              <span class="trip-port-value" aria-hidden="true" hidden></span>
-              <select id="trip-to" aria-label="To"><option value="" selected disabled>Choose ferry to</option></select>
+            <div class="trip-date-row">
+              <label class="trip-date-field" for="trip-date">
+                <span id="trip-date-weekday"></span>
+                <input id="trip-date" type="date" aria-label="Sailing date" aria-describedby="trip-date-weekday" required>
+              </label>
             </div>
-          </div>
-          <div class="trip-date-row">
-            <label class="trip-date-field" for="trip-date">
-              <span id="trip-date-weekday"></span>
-              <input id="trip-date" type="date" aria-label="Sailing date" aria-describedby="trip-date-weekday" required>
-            </label>
           </div>
           <div class="trip-sailing-step" id="trip-sailing-step" hidden>
             <div class="trip-pills" id="trip-pills" role="region" aria-label="Scheduled sailings" hidden></div>
