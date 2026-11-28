@@ -79,6 +79,11 @@
   .coast-content { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); height: calc(100dvh - var(--header-height)); padding: 0; }
   .coast-content > :is(#trip-records, .trip-sources) { display: none; }
   #sailings, .map-section { grid-area: 1 / 1; }
+  .masthead, #sailings {
+    background: rgb(255 255 255 / 70%);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+  }
   #sailings {
     position: relative;
     z-index: 3;
@@ -89,9 +94,6 @@
     overflow: hidden auto;
     overscroll-behavior-y: contain;
     scrollbar-width: thin;
-    background: rgb(255 255 255 / 70%);
-    -webkit-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
     border: 1px solid var(--control-border);
     border-radius: 12px;
     box-shadow: 0 3px 14px #173c6227;
@@ -109,8 +111,8 @@
   .map-section-header { display: block; margin: 0; }
   .map-section-header > div { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .map-sailing, .sailings-layout > .map-message { position: static; max-width: none; padding: 0 13px 7px; border: 0; background: none; }
-  .map-section .workspace { display: block; flex: 1; height: auto; min-height: 0; border: 0; border-radius: 0; }
-  .chart-panel { height: 100%; }
+  .map-section .workspace { position: relative; display: block; flex: 1; height: auto; min-height: 0; overflow: visible; border: 0; border-radius: 0; }
+  .chart-panel { position: absolute; inset: calc(-1 * var(--header-height)) 0 0; }
   .trip-table th, .trip-table td { padding: 8px 10px; }
 }
 @media (min-width: 640px) and (max-width: 950px) and (max-height: 500px) {

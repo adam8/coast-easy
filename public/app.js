@@ -22,6 +22,7 @@ const drawerEntries = Array.from(drawerMenu.querySelectorAll('button[aria-contro
   return { button, content, home, next: content.nextElementSibling, summary, caption: summary?.lastElementChild };
 });
 const feedBadge = byId('feed-badge');
+const masthead = document.querySelector('.masthead');
 const planner = byId('sailings');
 const plannerLayout = planner.querySelector('.sailings-layout');
 const mapContainer = byId('map');
@@ -399,11 +400,12 @@ function selectVessel(id, moveMap) {
 function compactMapPadding() {
   const view = mapContainer.getBoundingClientRect();
   const card = planner.getBoundingClientRect();
+  const topOverlay = sidePlanner.matches ? masthead.getBoundingClientRect() : card;
   const attribution = mapContainer.querySelector('.maplibregl-ctrl-attrib');
   const attributionTop = attribution?.getBoundingClientRect().top ?? view.bottom;
   const bottom = Math.min(Math.max(24, view.bottom - attributionTop + 10), view.height * .32);
   return {
-    top: sidePlanner.matches ? 19 : Math.max(16, Math.min(card.bottom - view.top + 20, view.height - bottom - 48)),
+    top: Math.max(16, Math.min(topOverlay.bottom - view.top + 20, view.height - bottom - 48)),
     right: 54,
     bottom,
     left: sidePlanner.matches ? card.right - view.left + 54 : 54,
@@ -461,7 +463,8 @@ function updateMapLayout() {
   layoutFrame = requestAnimationFrame(() => {
     layoutFrame = 0;
     if (!compactLayout.matches) return;
-    const depth = sidePlanner.matches ? 0 : planner.getBoundingClientRect().bottom - mapContainer.getBoundingClientRect().top;
+    const overlay = sidePlanner.matches ? masthead : planner;
+    const depth = overlay.getBoundingClientRect().bottom - mapContainer.getBoundingClientRect().top;
     mapContainer.parentElement.style.setProperty('--planner-depth', Math.max(0, depth) + 'px');
     if (!map || !cameraFocus) return;
     map.resize();

@@ -201,7 +201,8 @@ h1, .fleet-top h3 { margin: 6px 0 0; font-family: 'Manrope', 'DM Sans', sans-ser
 }
 @media (max-width: 710px), (max-width: 950px) and (max-height: 500px) {
   :root { --header-height: 57px; }
-  .masthead { padding-inline: max(8px, env(safe-area-inset-left)) max(8px, env(safe-area-inset-right)); gap: 4px; }
+  .masthead { padding-inline: max(8px, env(safe-area-inset-left)) max(8px, env(safe-area-inset-right)); gap: 4px; border-color: var(--control-border); color: var(--ink); }
+  .masthead :focus-visible { outline-color: var(--accent); }
   .brand { gap: 7px; min-width: 0; font-size: 1.075rem; }
   .brand-name { overflow: hidden; text-overflow: ellipsis; }
   .brand-mark { width: 30px; height: 30px; border-radius: 7px; flex-shrink: 0; }
@@ -209,10 +210,15 @@ h1, .fleet-top h3 { margin: 6px 0 0; font-family: 'Manrope', 'DM Sans', sans-ser
   .masthead-divider, .masthead-context { display: none; }
   .masthead-actions, .masthead-actions .map-actions { gap: 4px; }
   .feed-badge, .replay-toggle, .install-toggle { height: 30px; font-size: .78rem; padding: 0 6px; gap: 4px; }
+  .feed-badge { color: #75521d; background: #f4d6933d; border-color: #c79a515c; }
+  .feed-badge i { background: #a96723; }
+  .feed-badge[data-feed="connected"] { color: var(--accent-ink); background: #8cc3f827; border-color: var(--control-border); }
+  .feed-badge[data-feed="connected"] i { background: var(--accent); }
+  .replay-toggle, .install-toggle { color: var(--accent-ink); border-color: var(--control-border); }
   .install-label { display: none; }
   .workspace > .fleet-panel { display: none; }
-  .masthead-actions .map-button, .menu-toggle { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid #54728e; border-radius: 7px; background: transparent; box-shadow: none; color: #e4eef9; }
-  .masthead-actions .map-button:hover, .menu-toggle:hover { background: #294969; }
+  .masthead-actions .map-button, .menu-toggle { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--control-border); border-radius: 7px; background: transparent; box-shadow: none; color: var(--accent-ink); }
+  .masthead-actions :is(.map-button, .menu-toggle, .replay-toggle, .install-toggle):hover { background: var(--accent-soft); }
   .app-drawer[open] { position: fixed; inset: 0 0 0 auto; display: flex; flex-direction: column; margin: 0; padding: 0; border: 0; width: min(350px, calc(100% - 32px)); height: 100%; max-width: none; max-height: none; background: var(--paper); color: var(--ink); overflow: hidden; box-shadow: -8px 0 32px #142c4837; }
   .app-drawer::backdrop { background: transparent; }
   .drawer-header { display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
