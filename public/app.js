@@ -550,7 +550,7 @@ function addMarineLayers() {
   map.addLayer({
     id: 'terminal-points', source: 'terminals', type: 'circle',
     paint: {
-      'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 1.75, 8, 2.75, 12, 4],
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 1.75, 8, 2.75, 12, 4.5, 16, 5.25],
       'circle-color': '#f5faff', 'circle-stroke-color': '#527796', 'circle-stroke-width': 1.25, 'circle-stroke-opacity': .75,
     },
   });
@@ -567,7 +567,10 @@ function addMarineLayers() {
   });
   map.addLayer({
     id: 'planned-terminal-points', source: 'terminals', type: 'circle',
-    paint: { 'circle-radius': 4.5, 'circle-color': '#f5faff', 'circle-stroke-color': '#17558f', 'circle-stroke-width': 2 },
+    paint: {
+      'circle-radius': ['interpolate', ['linear'], ['zoom'], 5, 4.5, 12, 5.75, 16, 6.5],
+      'circle-color': '#f5faff', 'circle-stroke-color': '#17558f', 'circle-stroke-width': 2,
+    },
   });
   map.addLayer({
     id: 'planned-terminal-labels', source: 'terminals', type: 'symbol',
