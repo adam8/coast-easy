@@ -73,6 +73,9 @@
     --map-gutter-left: max(10px, env(safe-area-inset-left));
     --map-gutter-right: max(10px, env(safe-area-inset-right));
     --map-card-bottom: max(31px, calc(env(safe-area-inset-bottom) + 26px));
+    --overlay-control-opacity: 85%;
+    --overlay-control-surface: color-mix(in srgb, var(--control-surface) var(--overlay-control-opacity), transparent);
+    --overlay-control-highlight: color-mix(in srgb, var(--accent-soft) var(--overlay-control-opacity), transparent);
   }
   html, body { overflow: hidden; overscroll-behavior: none; }
   body { height: 100dvh; }
@@ -80,7 +83,7 @@
   .coast-content > :is(#trip-records, .trip-sources) { display: none; }
   #sailings, .map-section { grid-area: 1 / 1; }
   .masthead, #sailings {
-    background: rgb(255 255 255 / 70%);
+    background: rgb(255 255 255 / 65%);
     -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
   }
@@ -103,7 +106,9 @@
   .trip-ports { padding-block: 2px; }
   .trip-date-row { padding-block: 1px; }
   .trip-sailing-step { padding-top: 4px; }
-  .trip-pill { min-width: 0; padding: 5px 8px; white-space: normal; }
+  .trip-pill { min-width: 0; padding: 5px 8px; background: var(--overlay-control-surface); white-space: normal; }
+  .trip-pill:hover:not(:disabled), .trip-pill[aria-pressed="true"] { background: var(--overlay-control-highlight); }
+  .trip-pill:disabled { background: color-mix(in srgb, #f2f5f9 var(--overlay-control-opacity), transparent); }
   .trip-pill-times { display: grid; line-height: 1.15; white-space: nowrap; }
   .trip-pill-status { align-self: stretch; contain: inline-size; overflow-wrap: anywhere; }
   .trip-service { margin-top: 0; padding: 0 13px 6px; }

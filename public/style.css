@@ -217,8 +217,9 @@ h1, .fleet-top h3 { margin: 6px 0 0; font-family: 'Manrope', 'DM Sans', sans-ser
   .replay-toggle, .install-toggle { color: var(--accent-ink); border-color: var(--control-border); }
   .install-label { display: none; }
   .workspace > .fleet-panel { display: none; }
-  .masthead-actions .map-button, .menu-toggle { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--control-border); border-radius: 7px; background: transparent; box-shadow: none; color: var(--accent-ink); }
-  .masthead-actions :is(.map-button, .menu-toggle, .replay-toggle, .install-toggle):hover { background: var(--accent-soft); }
+  .masthead-actions .map-button, .menu-toggle { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--control-border); border-radius: 7px; box-shadow: none; color: var(--accent-ink); }
+  .masthead-actions :is(.map-button, .menu-toggle, .replay-toggle, .install-toggle) { background: var(--overlay-control-surface); }
+  .masthead-actions :is(.map-button, .menu-toggle, .replay-toggle, .install-toggle):hover { background: var(--overlay-control-highlight); }
   .app-drawer[open] { position: fixed; inset: 0 0 0 auto; display: flex; flex-direction: column; margin: 0; padding: 0; border: 0; width: min(350px, calc(100% - 32px)); height: 100%; max-width: none; max-height: none; background: var(--paper); color: var(--ink); overflow: hidden; box-shadow: -8px 0 32px #142c4837; }
   .app-drawer::backdrop { background: transparent; }
   .drawer-header { display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
